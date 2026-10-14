@@ -31,7 +31,7 @@ COLUMN_KEYWORDS: dict[str, list[str]] = {
     "balance": ["closing balance", "balance", "bal"],
 }
 # Headers that contain a keyword but must NOT be mapped to it.
-_EXCLUDE = {"date": ["value"], "debit": ["count"], "credit": ["count", "card"]}
+_EXCLUDE = {"date": ["value"], "debit": ["count", "/"], "credit": ["count", "card", "/"]}
 
 
 def _norm(s: object) -> str:
@@ -135,7 +135,7 @@ def parse_statement(path: str | Path, bank: str) -> list[dict]:
             continue
         date = _parse_date(cell(row, "date"))
         narration = re.sub(r"\s+", " ", cell(row, "narration"))
-        if "debit" in cols:
+        if "debit" in cols and "credit" in cols:
             debit, credit = _amount(cell(row, "debit")), _amount(cell(row, "credit"))
         else:
             amt = _amount(cell(row, "amount"))

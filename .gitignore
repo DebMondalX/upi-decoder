@@ -12,7 +12,6 @@ data/synthetic/*
 runs/
 models/
 results/predictions_*.jsonl
-results/confusion_*.csv
 
 # Python
 __pycache__/

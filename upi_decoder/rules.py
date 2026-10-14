@@ -101,7 +101,7 @@ _SELF = re.compile(r"\bSELF\b|\bOWN A/?C\b|\bTO OWN\b")
 _REFUND = re.compile(r"\bREFUND\b|\bRFND\b")
 _REVERSAL = re.compile(r"\bREV(ERSAL|RSL)?\b|\bRETURN(ED)?\b")
 _RENT = re.compile(r"\bRENT\b|\bHOUSE RENT\b|\bMAINTENANCE\b")
-_EMI = re.compile(r"\bEMI\b|\bLOAN\b|\bBAJAJ FIN|\bHOME LOAN|\bCC ?PAYMENT\b|\bCREDIT CARD\b")
+_EMI = re.compile(r"\bEMI\b|\bLOAN\b|\bBAJAJ FIN|\bHOME LOAN|\bCC ?PAYMENT\b|\bCREDIT CARD\b|\bBILLPAY CC\b")
 
 _NOISE = {
     "UPI", "DR", "CR", "P2A", "P2M", "PAYMENT", "PAY", "NEFT", "IMPS", "RTGS", "MMT", "TO", "FROM", "BY",

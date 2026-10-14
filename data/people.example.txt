@@ -1,0 +1,7 @@
+# Copy to data/people.txt (git-ignored) and list everyone whose name can appear
+# in your statements: you, family, flatmates, friends you split bills with, landlord.
+# Add the truncated forms banks print too; prefixes of 8+ chars are matched automatically.
+# Lines starting with # are ignored.
+RAHUL TIWARI
+SNEHA PATIL
+VENKATESH RAO

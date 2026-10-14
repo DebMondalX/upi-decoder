@@ -35,7 +35,10 @@ def export(args):
     from openpyxl.worksheet.datavalidation import DataValidation
 
     rows = read_jsonl(f"data/splits/{args.split}.jsonl")
-    teacher = {} if args.blank else {t["txn_id"]: t for t in read_jsonl(args.teacher) if t.get("label")}
+    tfile = args.teacher
+    if tfile == "data/interim/teacher_labels.jsonl" and Path("data/interim/teacher_labels.fixed.jsonl").exists():
+        tfile = "data/interim/teacher_labels.fixed.jsonl"  # 03b_fix_labels.py output
+    teacher = {} if args.blank else {t["txn_id"]: t for t in read_jsonl(tfile) if t.get("label")}
     from upi_decoder.rules import rules_predict
 
     def needs_check(r, lab):
@@ -50,7 +53,8 @@ def export(args):
         return ""
 
     for r in rows:
-        r["_check"] = "" if args.blank else needs_check(r, (teacher.get(r["txn_id"], {}) or {}).get("label"))
+        t = teacher.get(r["txn_id"], {}) or {}
+        r["_check"] = "" if args.blank else (f"auto-fixed: {t['autofix']}" if t.get("autofix") else needs_check(r, t.get("label")))
     # rows to look at first, then similar lines together
     rows.sort(key=lambda r: (r["_check"] == "", r.get("dedup_key", ""), r["date"]))
 

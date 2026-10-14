@@ -59,7 +59,7 @@ _MASKED_ACCT = re.compile(r"(?i)\b(?:X{2,}|\*{2,})[X*]*\d{2,6}\b")
 # VPA local parts are lowercase/digits in practice; requiring that stops the regex
 # from swallowing an upper-case name glued on with '-' (e.g. "HEALTHCARE-curefit@icici").
 _VPA = re.compile(r"(?<![\w.])([a-z0-9][a-z0-9._]*(?:-[a-z0-9._]+)*)@([a-zA-Z][\w]*)\b")
-_CARD = re.compile(r"\b\d{4,6}[X*]{4,}\d{4}\b")
+_CARD = re.compile(r"\b\d{4,6}[X*]{4,}\d{4}\b|\b\d{4}[ -]\d{4}[ -]\d{4}[ -]\d{4}\b")
 _PHONE = re.compile(r"(?<!\d)(?:\+?91[\s-]?)?[6-9]\d{9}(?!\d)")
 # gateway/transaction ids like ICI75e5ef09fd924df2b2..., PAZN69hq6zcF33..., XQOGP1V4GZS1
 _TXN_ID = re.compile(r"\b(?=[A-Za-z0-9]*\d)(?=[A-Za-z0-9]*[A-Za-z])[A-Za-z0-9]{12,}\b(?!@)")
@@ -224,10 +224,20 @@ def suggest_people(narrations: list[str]) -> list[str]:
     c: Counter[str] = Counter()
     for n in narrations:
         parts = [p.strip() for p in re.split(r"[/]", n)]
-        if not parts or "UPI" not in parts[0].upper():
+        if not parts:
+            continue
+        # any name-like field right after a long numeric ref (HSBC lines whose 'UPI' prefix OCR dropped)
+        for a, b in zip(parts, parts[1:]):
+            if re.fullmatch(r"\d{10,22}", a) and re.fullmatch(r"[A-Za-z][A-Za-z .'-]{2,29}", b) and not _BUSINESS_WORDS.search(b):
+                c[b] += 1
+        if "UPI" not in parts[0].upper():
             continue
         # ICICI/Kotak put the name in field 1; Axis (P2A/P2M) and SBI (DR/CR) in field 3.
-        idxs = [3] if len(parts) > 3 and parts[1].upper() in ("P2A", "P2M", "DR", "CR") else [1]
+        # HSBC: UPI/<ref>/<ref>/<name>
+        if len(parts) > 3 and (parts[1].upper() in ("P2A", "P2M", "DR", "CR") or parts[1].isdigit()):
+            idxs = [3]
+        else:
+            idxs = [1]
         for idx in idxs:
             if idx >= len(parts):
                 continue

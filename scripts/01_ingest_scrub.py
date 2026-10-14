@@ -15,7 +15,17 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from upi_decoder import ingest, rules, scrub  # noqa: E402
-from upi_decoder.io import write_jsonl  # noqa: E402
+from upi_decoder.io import read_jsonl, write_jsonl  # noqa: E402
+
+
+def _write_csv(path, rows):
+    import csv
+
+    cols = ["txn_id", "bank", "date", "direction", "amount", "mode", "narration"]
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=cols, extrasaction="ignore")
+        w.writeheader()
+        w.writerows(rows)
 
 
 def main():
@@ -34,8 +44,9 @@ def main():
 
     people = scrub.load_people(args.people) + args.self_name
     if args.auto_people:
-        sugg = scrub.suggest_people([r["narration"] for r in records])
         sp = Path(args.people).with_name("people.suggested.txt")
+        # keep earlier suggestions so names stay scrubbed after raw files are deleted
+        sugg = list(dict.fromkeys(scrub.suggest_people([r["narration"] for r in records]) + scrub.load_people(sp)))
         sp.parent.mkdir(parents=True, exist_ok=True)
         sp.write_text("# auto-suggested; move real people into people.txt, delete businesses\n" + "\n".join(sugg) + "\n")
         people = sorted(set(people) | set(sugg), key=len, reverse=True)
@@ -45,12 +56,23 @@ def main():
         r["narration"] = scrubber.scrub(r["narration"])
         r["mode"] = rules.payment_mode(r["narration"])
         r["dedup_key"] = rules.dedup_key(r["narration"])
+    # Incremental: keep previously scrubbed rows for banks not re-ingested this run,
+    # so raw statements can be deleted once they've been processed.
+    new_banks = {r["bank"] for r in records}
+    kept = [r for r in read_jsonl(args.out) if r["bank"] not in new_banks]
+    for r in kept:  # re-apply the (possibly bigger) name list; scrubbing is idempotent
+        r["narration"] = scrubber.scrub(r["narration"])
+        r["dedup_key"] = rules.dedup_key(r["narration"])
+    if kept:
+        print(f"keeping {len(kept)} previously scrubbed rows from {sorted({r['bank'] for r in kept})}")
+    records = sorted(kept + records, key=lambda r: (r["bank"], r["date"], r["txn_id"]))
     n = write_jsonl(args.out, records)
+    _write_csv(Path(args.out).with_name("transactions_scrubbed.csv"), records)
 
     banks = Counter(r["bank"] for r in records)
     months = sorted({r["date"][:7] for r in records})
     report = [
-        f"transactions: {n}",
+        f"transactions: {n}  (also written as transactions_scrubbed.csv)",
         f"unique (dedup) narrations: {len({r['dedup_key'] for r in records})}",
         f"by bank: {dict(banks)}",
         f"months: {months[0]} .. {months[-1]} ({len(months)})",

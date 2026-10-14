@@ -173,13 +173,17 @@ def parse_statement(path: str | Path, bank: str) -> list[dict]:
 
 
 def ingest_dir(raw_dir: str | Path) -> list[dict]:
-    """Parse every export under raw_dir/<bank>/*.{csv,xls,xlsx}."""
+    """Parse every export under raw_dir/<bank>/*.{csv,xls,xlsx,pdf}. PDFs go through OCR."""
     raw_dir = Path(raw_dir)
     out: list[dict] = []
     for bank_dir in sorted(p for p in raw_dir.iterdir() if p.is_dir()):
         for f in sorted(bank_dir.iterdir()):
             if f.suffix.lower() in (".csv", ".xls", ".xlsx"):
                 out.extend(parse_statement(f, bank=bank_dir.name))
+            elif f.suffix.lower() == ".pdf":
+                from .pdf_ocr import parse_scanned_pdf  # OCR; needs tesseract + poppler
+
+                out.extend(parse_scanned_pdf(f, bank=bank_dir.name))
     # de-duplicate overlapping exports (same txn appearing in two downloads)
     uniq = {r["txn_id"]: r for r in out}
     return sorted(uniq.values(), key=lambda r: (r["bank"], r["date"], r["txn_id"]))

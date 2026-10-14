@@ -66,12 +66,20 @@ python scripts/07_eval.py --only-rules
 (The rules baseline scores high on synthetic data because both use the same vocabulary. Real
 statements are much messier; that's the point of the model.)
 
+### Scanned PDF statements (HSBC and others)
+
+Some banks only give image-only PDFs. Drop them in `data/raw/<bank>/` like any export;
+they're OCR'd with Tesseract and every row is checked against the running balance,
+which also auto-corrects most misread amounts. Needs `brew install poppler tesseract`.
+
 ### Real run
 
 ```bash
 # 0. statements -> data/raw/<bank>/  (see data/README.md), names -> data/people.txt
-python scripts/01_ingest_scrub.py --self-name "YOUR NAME" --self-name "YOUR NAM"
-#    read data/interim/scrub_report.txt; add any leftover names to people.txt; re-run
+python scripts/01_ingest_scrub.py --self-name "YOUR NAME" --self-name "SURNAME NAME" --auto-people
+#    read data/interim/scrub_report.txt; add any leftover names to people.txt; re-run.
+#    Incremental: add another bank later and re-run; earlier banks' scrubbed rows are kept,
+#    so you can delete raw statements once processed.
 python scripts/02_make_splits.py --unseen-bank axis
 
 export TINKER_API_KEY=...

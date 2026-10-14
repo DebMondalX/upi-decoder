@@ -1,0 +1,34 @@
+# ---- PRIVATE DATA: never commit real bank data ----
+# Everything under data/ is ignored except the synthetic set and placeholders.
+data/*
+!data/synthetic/
+!data/README.md
+!data/people.example.txt
+data/synthetic/*
+!data/synthetic/.gitkeep
+!data/synthetic/sample/
+
+# Model runs, downloaded weights, eval predictions (may contain narrations)
+runs/
+models/
+results/predictions_*.jsonl
+results/confusion_*.csv
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Env / secrets
+.env
+.env.*
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/

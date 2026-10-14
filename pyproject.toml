@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "upi-decoder"
+version = "0.1.0"
+description = "Fine-tuned open model that turns cryptic Indian bank narrations into a clean, categorised ledger."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+    "pandas>=2.1",
+    "openpyxl>=3.1",   # .xlsx statement exports
+    "xlrd>=2.0",       # legacy .xls exports (HDFC, SBI)
+    "httpx>=0.27",     # local Ollama inference
+]
+
+[project.optional-dependencies]
+# Tinker: teacher labelling, fine-tuning, remote eval, weight export
+tinker = ["tinker", "tinker-cookbook"]
+# Optional closed-model baseline (any OpenAI-compatible endpoint)
+openai = ["openai>=1.40"]
+app = ["streamlit>=1.38"]
+dev = ["pytest>=8"]
+
+[tool.setuptools]
+packages = ["upi_decoder"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -101,7 +101,10 @@ class Scrubber:
                 variants |= {joined[:k] for k in range(8, len(joined) + 1)}
             alt = "|".join(re.escape(v) for v in sorted(variants, key=len, reverse=True))
             self._people_re.append((re.compile(r"(?i)(?<![A-Za-z])(?:" + alt + r")[A-Za-z]*"), p))
-        self._people_tokens = {w.lower() for p in self.people for w in p.split() if len(w) >= 3}
+        self._people_tokens = {
+            w.lower() for p in self.people for w in p.split()
+            if len(w) >= 4 and not _BRAND_SUBSTR.search(w.lower()) and not _BUSINESS_WORDS.search(w)
+        }
 
     def fake_name(self, real: str) -> str:
         r = re.sub(r"[^a-z]", "", real.lower())
@@ -114,6 +117,8 @@ class Scrubber:
 
     def _vpa(self, m: re.Match) -> str:
         local, handle = m.group(1), m.group(2)
+        if local.startswith("user_"):
+            return m.group(0)  # already pseudonymised (keeps re-scrubbing idempotent)
         if _PHONE.fullmatch(local) or re.fullmatch(r"\d{10}", local):
             return f"<PHONE>@{handle}"
         tokens = set(re.findall(r"[a-z]{3,}", local.lower()))
@@ -143,7 +148,27 @@ class Scrubber:
         t = _LONG_NUM.sub(lambda m: f"<REF{len(m.group(0))}>" if len(m.group(0)) == 12 else "<NUM>", t)
         for rx, real in self._people_re:
             t = rx.sub(self.fake_name(real), t)
-        return self._truncated_vpas(t)
+        return self._truncated_vpas(self._vpa_next_to_person(t))
+
+    _FAKE = None
+
+    def _vpa_next_to_person(self, t: str) -> str:
+        parts = t.split("/")
+        if len(parts) < 3 or parts[0].strip().upper() != "UPI":
+            return t
+        if Scrubber._FAKE is None:
+            Scrubber._FAKE = set(FAKE_NAMES) | {"SELF"}
+        # a field holding a fake name plus leftover initials/surname ("MR X Y", "X Y YADAV") -> just the fake name
+        for i, f in enumerate(parts[1:4], start=1):
+            for fk in Scrubber._FAKE:
+                if fk in f and f.strip() != fk and re.fullmatch(r"[A-Za-z .'-]+", f.strip()):
+                    parts[i] = fk
+                    break
+        if (parts[1].strip() in Scrubber._FAKE and "@" in parts[2] and not parts[2].startswith(("user_", "<"))
+                and "<" not in parts[2] and not _merchant_vpa(parts[2])):
+            local, _, handle = parts[2].partition("@")
+            parts[2] = f"user_{_stable_hash(local)}@{handle}"
+        return "/".join(parts)
 
     def _truncated_vpas(self, t: str) -> str:
         """ICICI prints 'UPI/<name>/<vpa>/<note>/...' and cuts the VPA at ~15 chars,
@@ -154,7 +179,7 @@ class Scrubber:
             return t
         for i in (1, 2):
             f, at = (parts[i][:-1], "@") if parts[i].endswith("@") else (parts[i], "")
-            if "@" in f or "<" in f or not re.fullmatch(r"[a-z0-9][a-z0-9._-]{4,15}", f) or not re.search(r"[a-z]{3}", f):
+            if f.startswith("user_") or "@" in f or "<" in f or not re.fullmatch(r"[a-z0-9][a-z0-9._-]{4,15}", f) or not re.search(r"[a-z]{3}", f):
                 continue
             if _MERCHANT_ID_PREFIX.match(f) or MERCHANT_HINTS.search(f) or _BRAND_SUBSTR.search(f):
                 continue
@@ -200,7 +225,9 @@ _BUSINESS_WORDS = re.compile(
     r"qwikcilver|woohoo|starbucks|chaayos|bigtree|bookmyshow|livpure|thomas|indian|clearing|iccl|razorpay|"
     r"bangalore|bengaluru|bmtc|bescom|temple|ttd|devasthanam|sagar|roll|rolls|kitchen|dhaba|bhavan|darshini|"
     r"general|provision|kirana|super|market|fresh|dairy|milk|salon|spa|gym|fitness|school|college|"
-    r"university|society|association|trust|foundation|excitel|easy|cle|kotak|mahindra|hdfc|icici|axis|sbi|medi|mandate\\w*|merchant|credit|card|generating|powered\\w*|payvia\\w*|test|stock|ipo|nps|gold|leftovers|refill)\b"
+    r"university|society|association|trust|foundation|excitel|easy|cle|kotak|mahindra|hdfc|icici|axis|sbi|medi|mandate\w*|merchant|credit|card|generating|powered\w*|payvia\w*|test|stock|ipo|nps|gold|leftovers|refill|"
+    r"irctc|ticketing|verificati\w*|cinepolis|nilgiris|westside|abhibus|shoffr|safegold|easebuzz|fancode|bmrcl|"
+    r"donatekart|pvr|inox|ixigo|ibibo|redbus|makemytrip|blinkit|bigbasket|zepto|instamart)\b"
 )
 
 
@@ -209,7 +236,11 @@ _BRAND_SUBSTR = re.compile(
     r"store|mart|shop|pay|bank|merchant|recharge|online|india|metro|bmrc|starbucks|thomascook|qwikcilver|"
     r"easytrip|livpure|hotstar|housing|spotify|licious|blinkit|bookmyshow|playstore|citrus|rzp|iccl|bsestar|"
     r"woohoo|rapido|cloud|hmshost|irctc|uber|ola|netflix|youtube|apple|myntra|nykaa|ajio|dmart|zepto|bigbasket|"
-    r"instamart|cred|phonepe|bharatpe|billdesk|cashfree|payu|ccavenue|tata|reliance|lic|insurance|mf|fund)"
+    r"instamart|cred|phonepe|bharatpe|billdesk|cashfree|payu|ccavenue|tata|reliance|lic|insurance|mf|fund|"
+    r"shoffr|cinepolis|nilgiris|westside|abhibus|makemytrip|safegold|easebuzz|fancode|bmrcl|donatekart|"
+    r"pvr|inox|ixigo|ibibo|redbus|cleartrip|yatra|klook|agoda|oyo|decathlon|ikea|croma|lenskart|pharmeasy|"
+    r"apollo|medplus|practo|cult|curefit|urbanclap|urbancompany|dunzo|bluedart|delhivery|matchpass|bundlepass|"
+    r"beginnerpack|verificati|ticketing|intent|remark|refund|order|donation|hosp|consulta|education|dento)"
 )
 
 
@@ -219,6 +250,13 @@ _NOT_NAMES = re.compile(
     r"rest|rent.*|bill.*|autopay|autope.*|juspay|dtax|tax|gst|salary|sal|cash|atm|transfer|trf|test|misc.*|"
     r"split|trip|cab|gift|loan|emi|fees?|charges?|recharge|order|txn|transaction.*|sent .*|received .*)$"
 )
+
+
+def _merchant_vpa(v: str) -> bool:
+    local = v.strip().lower().split("@")[0]
+    if not local or local.startswith("user_") or "<" in local:
+        return False
+    return bool(_MERCHANT_ID_PREFIX.match(local) or MERCHANT_HINTS.search(local) or _BRAND_SUBSTR.search(local))
 
 
 def _name_like(f: str) -> bool:
@@ -246,9 +284,8 @@ def suggest_people(narrations: list[str]) -> list[str]:
         if not parts:
             continue
         # any name-like field right after a long numeric ref (HSBC lines whose 'UPI' prefix OCR dropped)
-        for a, b in zip(parts, parts[1:]):
-            if re.fullmatch(r"\d{10,22}", a) and _name_like(b):
-                c[b] += 1
+        if re.fullmatch(r"\d{10,22}", parts[0]) and len(parts) > 1 and _name_like(parts[1]):
+            c[parts[1]] += 1
         if "UPI" not in parts[0].upper():
             continue
         # ICICI/Kotak put the name in field 1; Axis (P2A/P2M) and SBI (DR/CR) in field 3.
@@ -263,6 +300,8 @@ def suggest_people(narrations: list[str]) -> list[str]:
             f = parts[idx]
             if not _name_like(f):
                 continue
+            if idx == 1 and " " not in f.strip() and len(parts) > 2 and _merchant_vpa(parts[2]):
+                continue  # one-word payee on a merchant VPA (SHOFFR, CINEPOLIS): a business
             if " " not in f and f.islower() and _BRAND_SUBSTR.search(f):  # e.g. excitelbroadban, grofersindia
                 continue
             if f.upper() in {"UPI", "NA", "PAYMENT", "SELF", "COLLECT", "REFUND", "FOOD"} or f.upper().startswith(("PAYMENT", "UPI")):

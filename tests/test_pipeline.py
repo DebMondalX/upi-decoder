@@ -15,7 +15,7 @@ def test_ingest_roundtrip_all_banks(tmp_path):
         assert len(parsed) == len(rows), bank
         for p, r in zip(parsed, rows):
             assert (p["date"], p["narration"], p["direction"], p["amount"]) == (
-                r["date"], r["narration"], r["direction"], r["amount"]), bank
+                r["date"], ingest.normalize_narration(r["narration"]), r["direction"], r["amount"]), bank
 
 
 def test_scrubber_removes_identifiers_keeps_merchants():
@@ -68,3 +68,10 @@ def test_scrubber_icici_truncations():
     assert "samyak" not in out and "user_" in out
     out = s.scrub("UPI/Thomas Coo/thomascookindi/PaymentToT/AIRTEL PAY/530704570488/x")
     assert "thomascookindi" in out  # merchant kept
+
+
+def test_hdfc_upi_normalisation():
+    n = ingest.normalize_narration("UPI-M PRAKASH SO M C MAR-PRAKASHM8401@AXL-UBIN0901946-500693515398-PAYMENT TO PRAKASH")
+    assert n == "UPI/M PRAKASH SO M C MAR/prakashm8401@axl/UBIN0901946/500693515398/PAYMENT TO VPA"
+    out = scrub.Scrubber().scrub(n)
+    assert "prakash" not in out.lower().split("/")[2]

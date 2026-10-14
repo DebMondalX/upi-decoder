@@ -119,6 +119,30 @@ def _parse_date(s: str) -> str | None:
     return None
 
 
+_HDFC_UPI = re.compile(
+    r"^UPI-(?P<name>.*?)-(?:(?P<vpa>[A-Za-z0-9._-]+@[A-Za-z0-9]+)-)?(?P<ifsc>[A-Z]{4}0[A-Z0-9]{6})-(?P<ref>\d{12})-?(?P<note>.*)$"
+)
+
+
+def normalize_narration(n: str) -> str:
+    """Bring bank-specific UPI formats closer to one shape the scrubber understands.
+
+    HDFC prints 'UPI-NAME-VPA@HANDLE-IFSC-REF-PAYMENT TO <vpa prefix>' in upper case,
+    with '-' as separator (and '-' can also appear inside names and VPAs). Rewrite as
+    'UPI/NAME/vpa@handle/IFSC/REF/NOTE'; drop the VPA prefix HDFC copies into the note.
+    """
+    m = _HDFC_UPI.match(n)
+    if not m:
+        return n
+    vpa = (m.group("vpa") or "").lower()
+    note = m.group("note").strip()
+    local = vpa.split("@")[0]
+    nm = re.match(r"(?i)(payment to|paid to|pay to)\s+(\S+)(.*)", note)
+    if nm and local and local.upper().startswith(nm.group(2).upper()[:6]):
+        note = f"{nm.group(1)} VPA{nm.group(3)}"
+    return "/".join(["UPI", m.group("name").strip(), vpa, m.group("ifsc"), m.group("ref"), note])
+
+
 def parse_statement(path: str | Path, bank: str) -> list[dict]:
     """Parse one statement export into common records."""
     path = Path(path)
@@ -134,7 +158,7 @@ def parse_statement(path: str | Path, bank: str) -> list[dict]:
         if not any(str(c).strip() for c in row):
             continue
         date = _parse_date(cell(row, "date"))
-        narration = re.sub(r"\s+", " ", cell(row, "narration"))
+        narration = normalize_narration(re.sub(r"\s+", " ", cell(row, "narration")))
         if "debit" in cols and "credit" in cols:
             debit, credit = _amount(cell(row, "debit")), _amount(cell(row, "credit"))
         else:

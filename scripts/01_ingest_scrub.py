@@ -56,16 +56,28 @@ def main():
         r["narration"] = scrubber.scrub(r["narration"])
         r["mode"] = rules.payment_mode(r["narration"])
         r["dedup_key"] = rules.dedup_key(r["narration"])
-    # Incremental: keep previously scrubbed rows for banks not re-ingested this run,
-    # so raw statements can be deleted once they've been processed.
-    new_banks = {r["bank"] for r in records}
-    kept = [r for r in read_jsonl(args.out) if r["bank"] not in new_banks]
+    # Incremental: keep every previously scrubbed row not re-ingested this run (txn_ids
+    # come from the raw line, so overlapping exports dedupe), so raw statements can be
+    # deleted once they've been processed.
+    new_ids = {r["txn_id"] for r in records}
+    kept = [r for r in read_jsonl(args.out) if r["txn_id"] not in new_ids]
     for r in kept:  # re-apply the (possibly bigger) name list; scrubbing is idempotent
         r["narration"] = scrubber.scrub(r["narration"])
         r["dedup_key"] = rules.dedup_key(r["narration"])
     if kept:
         print(f"keeping {len(kept)} previously scrubbed rows from {sorted({r['bank'] for r in kept})}")
-    records = sorted(kept + records, key=lambda r: (r["bank"], r["date"], r["txn_id"]))
+    # The same transaction can print slightly differently in two exports ("H SBC" vs "HSBC");
+    # date + amount + running balance identifies it regardless. New rows win.
+    seen, merged = set(), []
+    for r in records + kept:
+        k = (r["bank"], r["date"], r["direction"], r["amount"], r.get("balance"))
+        if r.get("balance") is not None and k in seen:
+            continue
+        seen.add(k)
+        merged.append(r)
+    if len(merged) < len(records) + len(kept):
+        print(f"dropped {len(records) + len(kept) - len(merged)} cross-export duplicates")
+    records = sorted(merged, key=lambda r: (r["bank"], r["date"], r["txn_id"]))
     n = write_jsonl(args.out, records)
     _write_csv(Path(args.out).with_name("transactions_scrubbed.csv"), records)
 

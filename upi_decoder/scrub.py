@@ -87,7 +87,9 @@ def load_people(path: str | Path | None) -> list[str]:
 class Scrubber:
     def __init__(self, people: list[str] | None = None, self_names: list[str] | None = None):
         # your own name is scrubbed too (to "SELF"), whether or not it's in people.txt
-        self.people = sorted(set(people or []) | set(self_names or []), key=len, reverse=True)
+        names = set(people or []) | set(self_names or [])
+        names = {n for n in names if len(n.strip()) >= 4 and not _NOT_NAMES.match(n.strip())}
+        self.people = sorted(names, key=len, reverse=True)
         self.self_names = [n.lower() for n in (self_names or [])]
         # Banks truncate names ("RAHUL TIWARI" -> "RAHUL TIWA"), so also match
         # prefixes of each name down to 8 characters.
@@ -211,6 +213,23 @@ _BRAND_SUBSTR = re.compile(
 )
 
 
+# never treat these as names, whatever position they appear in
+_NOT_NAMES = re.compile(
+    r"(?i)^(upi|upi .*|.* upi|imps|neft|rtgs|nach|ach|self|na|null|payment.*|pay .*|collect|refund|food|lunch|dinner|"
+    r"rest|rent.*|bill.*|autopay|autope.*|juspay|dtax|tax|gst|salary|sal|cash|atm|transfer|trf|test|misc.*|"
+    r"split|trip|cab|gift|loan|emi|fees?|charges?|recharge|order|txn|transaction.*|sent .*|received .*)$"
+)
+
+
+def _name_like(f: str) -> bool:
+    return (
+        re.fullmatch(r"[A-Za-z][A-Za-z .'-]{2,29}", f) is not None
+        and not _BUSINESS_WORDS.search(f)
+        and not _NOT_NAMES.match(f.strip())
+        and re.search(r"[A-Za-z]{3}", f) is not None
+    )
+
+
 def suggest_people(narrations: list[str]) -> list[str]:
     """Candidate personal names from UPI counterparty fields, for data/people.txt.
 
@@ -228,7 +247,7 @@ def suggest_people(narrations: list[str]) -> list[str]:
             continue
         # any name-like field right after a long numeric ref (HSBC lines whose 'UPI' prefix OCR dropped)
         for a, b in zip(parts, parts[1:]):
-            if re.fullmatch(r"\d{10,22}", a) and re.fullmatch(r"[A-Za-z][A-Za-z .'-]{2,29}", b) and not _BUSINESS_WORDS.search(b):
+            if re.fullmatch(r"\d{10,22}", a) and _name_like(b):
                 c[b] += 1
         if "UPI" not in parts[0].upper():
             continue
@@ -242,7 +261,7 @@ def suggest_people(narrations: list[str]) -> list[str]:
             if idx >= len(parts):
                 continue
             f = parts[idx]
-            if not re.fullmatch(r"[A-Za-z][A-Za-z .'-]{2,29}", f) or _BUSINESS_WORDS.search(f):
+            if not _name_like(f):
                 continue
             if " " not in f and f.islower() and _BRAND_SUBSTR.search(f):  # e.g. excitelbroadban, grofersindia
                 continue

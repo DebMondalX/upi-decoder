@@ -1,6 +1,6 @@
 """Parse every statement export and scrub PII. Everything stays on your machine.
 
-    python scripts/01_ingest_scrub.py --raw data/raw --people data/people.txt --self-name "DEBARGHYA MONDAL"
+    python scripts/01_ingest_scrub.py --self-name "YOUR NAME" --self-name "SURNAME FIRSTNAME" --auto-people
 
 Input layout:  data/raw/<bank>/*.csv|xls|xlsx   (folder name = bank, e.g. hdfc, icici, sbi, axis)
 Output:        data/interim/transactions.jsonl  (scrubbed narrations only; raw text is not stored)
@@ -23,6 +23,8 @@ def main():
     ap.add_argument("--raw", default="data/raw")
     ap.add_argument("--people", default="data/people.txt", help="one name per line (you, family, friends, landlord)")
     ap.add_argument("--self-name", action="append", default=[], help="your own name as banks print it (repeatable)")
+    ap.add_argument("--auto-people", action="store_true",
+                    help="also scrub person-like UPI names found automatically (written to data/people.suggested.txt)")
     ap.add_argument("--out", default="data/interim/transactions.jsonl")
     args = ap.parse_args()
 
@@ -31,6 +33,13 @@ def main():
         sys.exit(f"No statements found under {args.raw}/<bank>/. See data/README.md.")
 
     people = scrub.load_people(args.people) + args.self_name
+    if args.auto_people:
+        sugg = scrub.suggest_people([r["narration"] for r in records])
+        sp = Path(args.people).with_name("people.suggested.txt")
+        sp.parent.mkdir(parents=True, exist_ok=True)
+        sp.write_text("# auto-suggested; move real people into people.txt, delete businesses\n" + "\n".join(sugg) + "\n")
+        people = sorted(set(people) | set(sugg), key=len, reverse=True)
+        print(f"auto-people: {len(sugg)} person-like names -> {sp}")
     scrubber = scrub.Scrubber(people=people, self_names=args.self_name)
     for r in records:
         r["narration"] = scrubber.scrub(r["narration"])

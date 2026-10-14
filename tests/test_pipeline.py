@@ -57,3 +57,14 @@ def test_metrics_counts_invalid_as_wrong():
     g = [Label("A", "merchant", "shopping"), Label("B", "person", "p2p_transfer")]
     m = score(g, [Label("A", "merchant", "shopping"), None])
     assert m["category_acc"] == 0.5 and m["valid_json"] == 0.5
+
+
+def test_scrubber_icici_truncations():
+    s = scrub.Scrubber(people=["SHILA MOND"], self_names=["DEBARGHYA MONDAL", "MONDAL DEBARGHYA"])
+    assert "MONDAL" not in s.scrub("BIL/INFT/EGV123/test/ SHILA MONDAL")
+    out = s.scrub("UPI/DEBARGHYA/debarghyamonda/credit car/HSBC/412312345678/ICI75e5ef09fd924df2b2305572")
+    assert "debarghya" not in out.lower() and out.startswith("UPI/SELF/") and "<ID>" in out
+    out = s.scrub("UPI/samyak.jain602@/UPI/AXIS BANK/412312345678/x")
+    assert "samyak" not in out and "user_" in out
+    out = s.scrub("UPI/Thomas Coo/thomascookindi/PaymentToT/AIRTEL PAY/530704570488/x")
+    assert "thomascookindi" in out  # merchant kept

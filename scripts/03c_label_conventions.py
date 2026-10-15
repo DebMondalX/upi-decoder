@@ -30,6 +30,10 @@ def fix(r, lab):
     def set_(new, why):
         if new!=lab: changed[why]+=1
         return new
+    # money moved between your own accounts *for* investing (note says so) -> investment (author's call)
+    if lab["category"]=="self_transfer" and re.search(r"\b(STOCKS?|IPO|MUTUAL FUNDS?|GOLDETF|GOLD|NPS|^SIP|/SIP/|INVEST\w*)\b", N) and "LUNCH" not in N:
+        fl=["sip"] if re.search(r"/SIP/|MUTUAL FUND", N) else []
+        return set_(L("Self","self","investment",fl),"self transfer for investing")
     if "NET BANKING SI" in N: return set_(L("Standing instruction","bank","other",["recurring"]),"standing instr")
     if re.search(r"\bGST\b|CGST|SGST", N) and amt<1000 and not cr: return set_(L("Bank charges","bank","fees_charges"),"gst")
     if "FOREX PAYMENT" in N or N.startswith("RFX "): return set_(L("Forex remittance","bank","other"),"forex")

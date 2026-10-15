@@ -1,0 +1,19 @@
+gold \ pred,food_delivery,groceries,dining,shopping,travel,fuel,utilities,rent,emi_loan,investment,insurance,salary_income,interest_income,p2p_transfer,self_transfer,cash_withdrawal,fees_charges,other,<invalid>
+food_delivery,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+groceries,0,3,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0
+dining,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+shopping,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+travel,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+fuel,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+utilities,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0
+rent,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+emi_loan,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,2,0
+investment,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+insurance,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+salary_income,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0
+interest_income,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0
+p2p_transfer,0,0,0,0,0,0,0,0,0,0,0,0,0,27,0,0,0,0,0
+self_transfer,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0
+cash_withdrawal,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0
+fees_charges,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+other,0,0,0,0,0,0,0,1,0,0,0,0,2,0,0,0,0,3,0

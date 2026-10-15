@@ -11,7 +11,7 @@ data/synthetic/*
 # Model runs, downloaded weights, eval predictions (may contain narrations)
 runs/
 models/
-results/predictions_*.jsonl
+results/**/predictions_*.jsonl
 
 # Python
 __pycache__/

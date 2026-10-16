@@ -56,20 +56,29 @@ def main():
         "PARAMETER temperature 0\n"
         "PARAMETER num_predict 160\n"
     )
+    (out / "Modelfile.safetensors").write_text(
+        f"FROM ./hf\n"
+        f'SYSTEM """{SHORT_SYSTEM}"""\n'
+        "PARAMETER temperature 0\n"
+        "PARAMETER num_predict 160\n"
+    )
     print(f"""
-Next, convert to GGUF with llama.cpp (one-time setup: git clone https://github.com/ggml-org/llama.cpp
-and pip install -r llama.cpp/requirements.txt, then build it):
+Load it into Ollama (the Ollama app must be running). Two ways; try A first.
 
-  python llama.cpp/convert_hf_to_gguf.py {hf} --outfile {out}/upi-decoder-f16.gguf --outtype f16
-  llama.cpp/build/bin/llama-quantize {out}/upi-decoder-f16.gguf {gguf} {args.quant}
+A) Let Ollama import the merged weights and quantise them itself:
+     cd {out} && ollama create upi-decoder -f Modelfile.safetensors --quantize q4_K_M && cd -
 
-Then load it into Ollama and evaluate on this laptop:
+B) If A says the architecture isn't supported, go through llama.cpp's GGUF converter:
+     git clone --depth 1 https://github.com/ggml-org/llama.cpp ~/llama.cpp
+     pip install -r ~/llama.cpp/requirements/requirements-convert_hf_to_gguf.txt
+     python ~/llama.cpp/convert_hf_to_gguf.py {hf} --outfile {out}/upi-decoder-f16.gguf --outtype f16
+     brew install llama.cpp      # provides llama-quantize
+     llama-quantize {out}/upi-decoder-f16.gguf {gguf} {args.quant}
+     cd {out} && ollama create upi-decoder -f Modelfile && cd -
 
-  cd {out} && ollama create upi-decoder -f Modelfile && cd -
-  python scripts/07_eval.py --run {args.run} --local upi-decoder --skip student-few teacher-few
-
-Modelfile written to {modelfile}. If Ollama's output includes thinking tags, the
-backend already sends think=false; check `ollama show upi-decoder --modelfile` for the template.
+Then check it and measure laptop speed on the test sets (no network needed):
+     ollama run upi-decoder "Narration: UPI/ZOMATO LIM/<ID>.g/UPI/AXIS BANK/<REF12>/<ID>/\nDirection: debit\nAmount: 129.93"
+     python scripts/07_eval.py --run {args.run} --local upi-decoder --skip rules student-few teacher-few finetuned --out results/local
 """)
 
 

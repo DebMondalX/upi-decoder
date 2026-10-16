@@ -229,3 +229,22 @@ def write_bank_csv(rows: list[dict], path: Path) -> None:
                 w.writerow([i, d, d, r["narration"], "", amt, "DR" if r["direction"] == "debit" else "CR", f"{bal:.2f}"])
         w.writerow([])
         w.writerow(["*** End of statement ***"])
+
+
+def demo_statement_records() -> list[dict]:
+    """The fixed synthetic statement used by the app's demo (and by the hosted demo cache).
+    Parsed and scrubbed exactly as a real upload would be."""
+    import tempfile
+
+    from . import ingest, rules, scrub
+
+    rows = generate_bank("hdfc", 250, date(2026, 4, 1), date(2026, 9, 30), seed=42)
+    with tempfile.TemporaryDirectory() as d:
+        p = Path(d) / "demo_statement.csv"
+        write_bank_csv(rows, p)
+        recs = ingest.parse_statement(p, "hdfc")
+    s = scrub.Scrubber()
+    for r in recs:
+        r["narration"] = s.scrub(r["narration"])
+        r["key"] = rules.dedup_key(r["narration"])
+    return recs

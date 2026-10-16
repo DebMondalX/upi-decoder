@@ -1,0 +1,6 @@
+# Minimal deps for the hosted demo (no Tinker, no torch, no OCR).
+pandas>=2.1
+openpyxl>=3.1
+xlrd>=2.0
+httpx>=0.27
+streamlit>=1.38

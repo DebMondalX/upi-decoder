@@ -1,0 +1,14 @@
+# Render Blueprint for the hosted demo (synthetic statement + cached fine-tuned model output).
+# Render dashboard -> New -> Blueprint -> pick this repo.
+services:
+  - type: web
+    name: upi-decoder-demo
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements-demo.txt
+    startCommand: streamlit run app/app.py --server.port $PORT --server.address 0.0.0.0 --server.headless true
+    envVars:
+      - key: UPI_DEMO
+        value: "1"
+      - key: PYTHON_VERSION
+        value: "3.12.7"

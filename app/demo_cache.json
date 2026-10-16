@@ -1,0 +1,1239 @@
+{
+ "model": "tinker:Qwen/Qwen3.5-4B",
+ "labels": {
+  "BILLPAY CC AXIS #": {
+   "merchant": "Axis Bank",
+   "counterparty_type": "bank",
+   "category": "emi_loan",
+   "flags": []
+  },
+  "UPI ATRIA CONVERGENCE TECH ACTFIBERNET@ICICI YESB## # SENT USING PAYTM": {
+   "merchant": "Atria Convergence Tech",
+   "counterparty_type": "merchant",
+   "category": "utilities",
+   "flags": [
+    "recurring"
+   ]
+  },
+  "POS # TRUFFLES RESTAURANT": {
+   "merchant": "Truffles Restaurant",
+   "counterparty_type": "merchant",
+   "category": "dining",
+   "flags": []
+  },
+  "UPI BUNDL TECHNO SWIGGYUPI@AXB SBIN## # COLLECT": {
+   "merchant": "Swiggy",
+   "counterparty_type": "merchant",
+   "category": "food_delivery",
+   "flags": []
+  },
+  "UPI VENKATESH RA USER@OKHDFCBANK UTIB## # HOUSE RENT OCT": {
+   "merchant": "Venkatesh Ra",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI HP PETROL PUMP KORAM USER@YBL SBIN## # PAYMENT": {
+   "merchant": "HP Petrol Pump",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI CUREFIT HEALTHC CUREFIT@ICICI ICIC## # UPI": {
+   "merchant": "Curefit",
+   "counterparty_type": "merchant",
+   "category": "other",
+   "flags": []
+  },
+  "UPI INNOVATIVE RETAIL CO BIGBASKET@ICICI SBIN## # PAYMENT": {
+   "merchant": "Bigbasket",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "UPI RAHUL TIWA #@OKSBI UTIB## # TRIP": {
+   "merchant": "Rahul Tiwa",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "DC ANNUAL FEE GST": {
+   "merchant": "Bank",
+   "counterparty_type": "bank",
+   "category": "fees_charges",
+   "flags": []
+  },
+  "ACH D BAJAJ FINANCE LTD #": {
+   "merchant": "Bajaj Finance",
+   "counterparty_type": "merchant",
+   "category": "emi_loan",
+   "flags": []
+  },
+  "UPI PRIYA SHARMA USER@OKICICI KKBK## # UPI": {
+   "merchant": "Priya Sharma",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "NEFT CR CITI## NIMBUS ANALYTICS INDIA PVT LTD ANIK ROY #": {
+   "merchant": "Nimbus Analytics India",
+   "counterparty_type": "merchant",
+   "category": "salary_income",
+   "flags": [
+    "salary"
+   ]
+  },
+  "UPI AIRTEL PAY AIRTELPAYMENTSBANK@AIRTEL YESB## # PAYMENT": {
+   "merchant": "Airtel",
+   "counterparty_type": "merchant",
+   "category": "utilities",
+   "flags": []
+  },
+  "ACH D BD PPFAS MUTUAL FUND #": {
+   "merchant": "Mutual fund",
+   "counterparty_type": "merchant",
+   "category": "investment",
+   "flags": [
+    "recurring",
+    "sip"
+   ]
+  },
+  "UPI CRED CLUB CRED.CLUB@AXISB UTIB## # UPI": {
+   "merchant": "Cred Club",
+   "counterparty_type": "merchant",
+   "category": "investment",
+   "flags": [
+    "sip"
+   ]
+  },
+  "UPI AIRTEL PAYMENTS BANK AIRTELPAYMENTSBANK@AIRTEL HDFC## # PAYMENT FROM PH": {
+   "merchant": "Airtel",
+   "counterparty_type": "merchant",
+   "category": "utilities",
+   "flags": []
+  },
+  "UPI SWIGGY LIMITED SWIGGY.STORES@YE ICIC## # UPI": {
+   "merchant": "Swiggy",
+   "counterparty_type": "merchant",
+   "category": "food_delivery",
+   "flags": []
+  },
+  "UPI SNEHA PATI USER@OKHDFCBANK SBIN## # TRIP": {
+   "merchant": "Sneha Pati",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI TRUFFLES RES PAYTMQR#RTX#@PAYTM KKBK## # PAY TO MERCHANT": {
+   "merchant": "Truffles Res",
+   "counterparty_type": "merchant",
+   "category": "other",
+   "flags": []
+  },
+  "UPI UBER INDIA SYSTEMS UBER.RIDES@HDFCBANK SBIN## # PAYMENT FROM PH": {
+   "merchant": "Uber",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI RAHUL TIWARI USER@IBL KKBK## # DINNER SPLIT": {
+   "merchant": "Rahul Tiwari",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI SWIGGY LIMITED SWIGGY.STORES@YE UTIB## # COLLECT": {
+   "merchant": "Swiggy",
+   "counterparty_type": "merchant",
+   "category": "food_delivery",
+   "flags": []
+  },
+  "UPI SRI LAKSHMI STORES PAYTMQR#@PAYTM HDFC## # NA": {
+   "merchant": "Sri Lakshmi Stores",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "UPI MEGHA IYER USER@OKAXIS ICIC## # TRIP": {
+   "merchant": "Mega Iyer",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI SRI LAKSHMI PAYTMQR#@PAYTM HDFC## # PAYMENT": {
+   "merchant": "Sri Lakshmi",
+   "counterparty_type": "merchant",
+   "category": "other",
+   "flags": []
+  },
+  "UPI RAHUL TIWARI USER@AXL KKBK## # UPI": {
+   "merchant": "Rahul Tiwari",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "REV UPI # BUNDL TECHNOLOG SWIGGYUPI@AXB": {
+   "merchant": "Swiggy",
+   "counterparty_type": "merchant",
+   "category": "food_delivery",
+   "flags": []
+  },
+  "UPI SWIGGY LIMIT SWIGGY.STORES@YE ICIC## # SENT USING PAYTM": {
+   "merchant": "Swiggy",
+   "counterparty_type": "merchant",
+   "category": "food_delivery",
+   "flags": []
+  },
+  "UPI INNOVATIVE RETAIL CO BIGBASKET@ICICI ICIC## # PAYMENT": {
+   "merchant": "Bigbasket",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "UPI AIRTEL PAYMENTS AIRTELPAYMENTSBANK@AIRTEL UTIB## # COLLECT": {
+   "merchant": "Airtel",
+   "counterparty_type": "merchant",
+   "category": "utilities",
+   "flags": []
+  },
+  "UPI SOURAV PAL USER@OKHDFCBANK YESB## # UPI": {
+   "merchant": "Sourav Pal",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "ACH D LIC OF INDIA #": {
+   "merchant": "LIC of India",
+   "counterparty_type": "merchant",
+   "category": "insurance",
+   "flags": []
+  },
+  "POS # FLIPKART INTERNET": {
+   "merchant": "Flipkart",
+   "counterparty_type": "merchant",
+   "category": "shopping",
+   "flags": []
+  },
+  "UPI SNEHA PATI #@IBL KKBK## # DINNER SPLIT": {
+   "merchant": "Sneha Pati",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI INNOVATIVE R BIGBASKET@ICICI SBIN## # COLLECT": {
+   "merchant": "Bigbasket",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "UPI BLINK COMMERCE PVT BLINKIT.PAYU@HDFCBANK HDFC## # PAY TO MERCHANT": {
+   "merchant": "Blinkit",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "UPI CUREFIT HEALTHCARE CUREFIT@ICICI ICIC## # NA": {
+   "merchant": "Curefit Healthcare",
+   "counterparty_type": "merchant",
+   "category": "other",
+   "flags": []
+  },
+  "UPI ZERODHA BR ZERODHABROKING@HDFCBANK KKBK## # PAYMENT": {
+   "merchant": "Zerodha",
+   "counterparty_type": "merchant",
+   "category": "investment",
+   "flags": []
+  },
+  "UPI VENKATESH RAO #@OKSBI HDFC## # RENT": {
+   "merchant": "Venkatesh Rao",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI BESCOM BESCOM@BILLDESK HDFC## # PAYMENT FROM PH": {
+   "merchant": "BESCOM",
+   "counterparty_type": "merchant",
+   "category": "utilities",
+   "flags": []
+  },
+  "UPI ARJUN NAIR USER@OKAXIS HDFC## # PAYMENT FROM PH": {
+   "merchant": "Arjun Nair",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI KUNAL BASU USER@OKAXIS SBIN## # UPI": {
+   "merchant": "Kunal Basu",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI ARJUN NAIR USER@OKICICI UTIB## # TRIP": {
+   "merchant": "Arjun Nair",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI REFUND IRC IRCTC.UTS@SBI UTIB## # REFUND": {
+   "merchant": "IRCTC",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": [
+    "refund"
+   ]
+  },
+  "UPI INNOVATIVE BIGBASKET@ICICI KKBK## # UPI": {
+   "merchant": "Bigbasket",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "UPI SOURAV PAL USER@OKAXIS HDFC## # NA": {
+   "merchant": "Sourav Pal",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI SNEHA PATIL USER@OKICICI ICIC## # NA": {
+   "merchant": "Sneha Patil",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI REFUND ROPPEN T RAPIDO@AXISBANK KKBK## # REFUND": {
+   "merchant": "Rapido",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": [
+    "refund"
+   ]
+  },
+  "UPI SRI LAKSHMI STO PAYTMQR#@PAYTM UTIB## # PAY TO MERCHANT": {
+   "merchant": "Sri Lakshmi Stores",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "UPI SNEHA PATIL USER@OKHDFCBANK YESB## # FOOD": {
+   "merchant": "Sneha Patil",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI THIRD WAVE USER@YBL SBIN## # COLLECT": {
+   "merchant": "Third Wave",
+   "counterparty_type": "merchant",
+   "category": "other",
+   "flags": []
+  },
+  "UPI AMAZON PAY INDIA AMAZONUPI@APL KKBK## # SENT USING PAYTM": {
+   "merchant": "Amazon",
+   "counterparty_type": "merchant",
+   "category": "shopping",
+   "flags": []
+  },
+  "UPI BLINK COMMER BLINKIT.PAYU@HDFCBANK HDFC## # SENT USING PAYTM": {
+   "merchant": "Blinkit",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "UPI SOURAV PAL USER@OKHDFCBANK YESB## # CAB SHARE": {
+   "merchant": "Sourav Pal",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI MEGHA IYER #@OKSBI YESB## # PAYMENT FROM PH": {
+   "merchant": "Mega Iyer",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "ACH D HDFC LIFE INSURANCE #": {
+   "merchant": "HDFC Life Insurance",
+   "counterparty_type": "merchant",
+   "category": "insurance",
+   "flags": []
+  },
+  "UPI INTERGLOBE A INDIGO@ICICI SBIN## # COLLECT": {
+   "merchant": "Indigo",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI SOURAV PAL #@AXL KKBK## # FOOD": {
+   "merchant": "Sourav Pal",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI MYNTRA DESIGNS MYNTRA@ICICI YESB## # PAYMENT": {
+   "merchant": "Myntra",
+   "counterparty_type": "merchant",
+   "category": "shopping",
+   "flags": []
+  },
+  "UPI NEXTBILLION TEC GROWW.BRK@VALIDICICI YESB## # PAYMENT FROM PH": {
+   "merchant": "Groww",
+   "counterparty_type": "merchant",
+   "category": "investment",
+   "flags": []
+  },
+  "UPI REFUND FLIPKART INTERNET FKRT@YBL HDFC## # REFUND": {
+   "merchant": "Flipkart",
+   "counterparty_type": "merchant",
+   "category": "shopping",
+   "flags": [
+    "refund"
+   ]
+  },
+  "UPI RELIANCE JIO INFOCOMM JIO@SBI ICIC## # NA": {
+   "merchant": "Reliance Jio",
+   "counterparty_type": "merchant",
+   "category": "utilities",
+   "flags": []
+  },
+  "UPI HP PETROL PUMP KORAMANGALA USER@YBL UTIB## # NA": {
+   "merchant": "HP Petrol Pump",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI SWIGGY LIMITED SWIGGY.STORES@YE HDFC## # PAY TO MERCHANT": {
+   "merchant": "Swiggy",
+   "counterparty_type": "merchant",
+   "category": "food_delivery",
+   "flags": []
+  },
+  "BILLPAY CC HDFC #": {
+   "merchant": "HDFC Bank",
+   "counterparty_type": "bank",
+   "category": "emi_loan",
+   "flags": []
+  },
+  "UPI MYNTRA DESIGNS MYNTRA@ICICI KKBK## # PAYMENT FROM PH": {
+   "merchant": "Myntra",
+   "counterparty_type": "merchant",
+   "category": "shopping",
+   "flags": []
+  },
+  "UPI REFUND ZOMATO LTD ZOMATO ORDER@PTYBL ICIC## # REFUND": {
+   "merchant": "Zomato",
+   "counterparty_type": "merchant",
+   "category": "food_delivery",
+   "flags": [
+    "refund"
+   ]
+  },
+  "ACH D BD ICICI PRU MF #": {
+   "merchant": "ICICI Prudential Mutual Fund",
+   "counterparty_type": "merchant",
+   "category": "investment",
+   "flags": [
+    "recurring",
+    "sip"
+   ]
+  },
+  "UPI RAHUL TIWARI USER@OKAXIS HDFC## # UPI": {
+   "merchant": "Rahul Tiwari",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI HP PETROL PUMP USER@YBL YESB## # PAYMENT": {
+   "merchant": "HP Petrol Pump",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI REFUND ROPPEN TRANSP RAPIDO@AXISBANK SBIN## # REFUND": {
+   "merchant": "Rapido",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": [
+    "refund"
+   ]
+  },
+  "UPI VENKATESH RA USER@AXL ICIC## # HOUSE RENT OCT": {
+   "merchant": "Venkatesh Ra",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI REFUND ROPPE RAPIDO@AXISBANK ICIC## # REFUND": {
+   "merchant": "Rapido",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": [
+    "refund"
+   ]
+  },
+  "ACH D BD HDFC MUTUAL FUND #": {
+   "merchant": "HDFC Mutual Fund",
+   "counterparty_type": "merchant",
+   "category": "investment",
+   "flags": [
+    "recurring",
+    "sip"
+   ]
+  },
+  "POS # SRI LAKSHMI STORES": {
+   "merchant": "Sri Lakshmi Stores",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "UPI INTERGLOBE AVIATION INDIGO@ICICI SBIN## # UPI": {
+   "merchant": "Indigo",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "NWD # S#AW# INDIRANAGAR": {
+   "merchant": "Indira Nagar",
+   "counterparty_type": "person",
+   "category": "rent",
+   "flags": []
+  },
+  "UPI MEGHA IYER #@OKICICI KKBK## # PAYMENT FROM PH": {
+   "merchant": "Megahe Iyer",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "IMPS # ANIK ROY SBIN # OWN ACCOUNT": {
+   "merchant": "Anik Roy",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI BMRCL BMRCL.QR@KOTAK ICIC## # PAY TO MERCHANT": {
+   "merchant": "Namma Metro",
+   "counterparty_type": "government",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI CUREFIT HEALTHCARE CUREFIT@ICICI UTIB## # PAY TO MERCHANT": {
+   "merchant": "Curefit Healthcare",
+   "counterparty_type": "merchant",
+   "category": "other",
+   "flags": []
+  },
+  "UPI REFUND INTER INDIGO@ICICI KKBK## # REFUND": {
+   "merchant": "Indigo",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": [
+    "refund"
+   ]
+  },
+  "UPI ROPPEN TRANSPOR RAPIDO@AXISBANK HDFC## # PAY TO MERCHANT": {
+   "merchant": "Rapido",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI SOURAV PAL USER@OKSBI SBIN## # TRIP": {
+   "merchant": "Sourav Pal",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "IMPS CHG #": {
+   "merchant": "Bank charges",
+   "counterparty_type": "bank",
+   "category": "fees_charges",
+   "flags": []
+  },
+  "UPI MYNTRA DESIG MYNTRA@ICICI SBIN## # UPI": {
+   "merchant": "Myntra",
+   "counterparty_type": "merchant",
+   "category": "shopping",
+   "flags": []
+  },
+  "UPI KIRANAKART T ZEPTONOW@YBL YESB## # PAYMENT": {
+   "merchant": "Kiranakart",
+   "counterparty_type": "merchant",
+   "category": "other",
+   "flags": []
+  },
+  "BILLPAY CC ICICI #": {
+   "merchant": "ICICI Bank",
+   "counterparty_type": "bank",
+   "category": "emi_loan",
+   "flags": []
+  },
+  "NWD # S#AW# BERHAMPORE": {
+   "merchant": "S1AW8959",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "INTEREST PAID TILL # SEP #": {
+   "merchant": "Bank",
+   "counterparty_type": "bank",
+   "category": "interest_income",
+   "flags": [
+    "interest"
+   ]
+  },
+  "REV UPI # SWIGGY LIMITED SWIGGY.STORES@YE": {
+   "merchant": "Swiggy",
+   "counterparty_type": "merchant",
+   "category": "food_delivery",
+   "flags": []
+  },
+  "UPI BLINK COMM BLINKIT.PAYU@HDFCBANK SBIN## # SENT USING PAYTM": {
+   "merchant": "Blinkit",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "POS # KIRANAKART TECHNOLOG": {
+   "merchant": "Kiranakart Technologies",
+   "counterparty_type": "merchant",
+   "category": "investment",
+   "flags": [
+    "reversal"
+   ]
+  },
+  "UPI MYNTRA DESIGNS MYNTRA@ICICI HDFC## # UPI": {
+   "merchant": "Myntra",
+   "counterparty_type": "merchant",
+   "category": "shopping",
+   "flags": []
+  },
+  "NWD # S#AW# HSR LAYOUT": {
+   "merchant": "HSR Layout",
+   "counterparty_type": "person",
+   "category": "rent",
+   "flags": []
+  },
+  "SMS ALERT CHGS QTR SEP#": {
+   "merchant": "Bank charges",
+   "counterparty_type": "bank",
+   "category": "fees_charges",
+   "flags": []
+  },
+  "CHRG MIN BAL NON MAINT": {
+   "merchant": "Bank",
+   "counterparty_type": "bank",
+   "category": "fees_charges",
+   "flags": []
+  },
+  "UPI IRCTC UTS IRCTC.UTS@SBI SBIN## # NA": {
+   "merchant": "IRCTC",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI NEXTBILLION TECHNOLOGY GROWW.BRK@VALIDICICI HDFC## # SENT USING PAYTM": {
+   "merchant": "Groww",
+   "counterparty_type": "merchant",
+   "category": "investment",
+   "flags": []
+  },
+  "UPI RELIANCE JIO INFOCOMM JIO@SBI HDFC## # COLLECT": {
+   "merchant": "Reliance Jio",
+   "counterparty_type": "merchant",
+   "category": "utilities",
+   "flags": []
+  },
+  "UPI THIRD WAVE COFFEE USER@YBL ICIC## # PAYMENT": {
+   "merchant": "Third Wave Coffee",
+   "counterparty_type": "merchant",
+   "category": "dining",
+   "flags": []
+  },
+  "UPI REFUND SWIGGY LIMITE SWIGGY.STORES@YE ICIC## # REFUND": {
+   "merchant": "Swiggy",
+   "counterparty_type": "merchant",
+   "category": "food_delivery",
+   "flags": [
+    "refund"
+   ]
+  },
+  "UPI INNOVATIVE R BIGBASKET@ICICI UTIB## # SENT USING PAYTM": {
+   "merchant": "Bigbasket",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "IMPS P#A # SELF SBIN #": {
+   "merchant": "Self",
+   "counterparty_type": "self",
+   "category": "self_transfer",
+   "flags": []
+  },
+  "UPI FLIPKART INTERNET FKRT@YBL SBIN## # PAYMENT": {
+   "merchant": "Flipkart",
+   "counterparty_type": "merchant",
+   "category": "shopping",
+   "flags": []
+  },
+  "UPI REFUND AMAZO AMAZONUPI@APL YESB## # REFUND": {
+   "merchant": "Amazon",
+   "counterparty_type": "merchant",
+   "category": "shopping",
+   "flags": [
+    "refund"
+   ]
+  },
+  "UPI MEGHA IYER USER@IBL KKBK## # UPI": {
+   "merchant": "Megahe Iyer",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI MEGHA IYER USER@OKAXIS UTIB## # UPI": {
+   "merchant": "Mega Iyer",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI SNEHA PATIL USER@OKSBI HDFC## # PAYMENT FROM PH": {
+   "merchant": "Sneha Patil",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI VENKATESH RAO USER@OKICICI UTIB## # RENT": {
+   "merchant": "Venkatesh Rao",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI BUNDL TECHNOLOG SWIGGYUPI@AXB UTIB## # UPI": {
+   "merchant": "Swiggy",
+   "counterparty_type": "merchant",
+   "category": "food_delivery",
+   "flags": []
+  },
+  "UPI UBER INDIA UBER.RIDES@HDFCBANK HDFC## # PAY TO MERCHANT": {
+   "merchant": "Uber",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI AMAZON PAY AMAZONUPI@APL ICIC## # UPI": {
+   "merchant": "Amazon",
+   "counterparty_type": "merchant",
+   "category": "shopping",
+   "flags": []
+  },
+  "UPI SWIGGY LIMITED SWIGGY.STORES@YE ICIC## # COLLECT": {
+   "merchant": "Swiggy",
+   "counterparty_type": "merchant",
+   "category": "food_delivery",
+   "flags": []
+  },
+  "UPI IRCTC UTS IRCTC.UTS@SBI ICIC## # SENT USING PAYTM": {
+   "merchant": "IRCTC",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI SOURAV PAL USER@OKICICI HDFC## # NA": {
+   "merchant": "Sourav Pal",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI REFUND INTERGLOBE AVIATION INDIGO@ICICI SBIN## # REFUND": {
+   "merchant": "Indigo",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": [
+    "refund"
+   ]
+  },
+  "UPI VENKATESH USER@OKHDFCBANK UTIB## # RENT": {
+   "merchant": "Venkatesh",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI ZOMATO LTD ZOMATO ORDER@PTYBL SBIN## # PAYMENT": {
+   "merchant": "Zomato",
+   "counterparty_type": "merchant",
+   "category": "food_delivery",
+   "flags": []
+  },
+  "UPI BUNDL TECHNOLOGIES SWIGGYUPI@AXB HDFC## # SENT USING PAYTM": {
+   "merchant": "Swiggy",
+   "counterparty_type": "merchant",
+   "category": "food_delivery",
+   "flags": []
+  },
+  "UPI VENKATESH RAO USER@OKICICI KKBK## # HOUSE RENT OCT": {
+   "merchant": "Venkatesh Rao",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "POS # THIRD WAVE COFFEE": {
+   "merchant": "Third Wave Coffee",
+   "counterparty_type": "merchant",
+   "category": "dining",
+   "flags": []
+  },
+  "UPI ROPPEN TRANSPORTATIO RAPIDO@AXISBANK ICIC## # PAY TO MERCHANT": {
+   "merchant": "Rapido",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI RELIANCE J JIO@SBI KKBK## # PAYMENT FROM PH": {
+   "merchant": "Reliance Jio",
+   "counterparty_type": "merchant",
+   "category": "utilities",
+   "flags": []
+  },
+  "UPI HP PETROL PUMP KORAMANGALA USER@YBL HDFC## # UPI": {
+   "merchant": "HP Petrol Pump",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "ACH D STAR HEALTH AND ALLIED #": {
+   "merchant": "Star Health and Allied",
+   "counterparty_type": "merchant",
+   "category": "insurance",
+   "flags": [
+    "recurring"
+   ]
+  },
+  "UPI ZOMATO LTD ZOMATO ORDER@PTYBL UTIB## # UPI": {
+   "merchant": "Zomato",
+   "counterparty_type": "merchant",
+   "category": "food_delivery",
+   "flags": []
+  },
+  "UPI RAHUL TIWA USER@OKHDFCBANK UTIB## # UPI": {
+   "merchant": "Rahul Tiwa",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI PRIYA SHARMA USER@OKICICI HDFC## # UPI": {
+   "merchant": "Priya Sharma",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI NEXTBILLION TEC GROWW.BRK@VALIDICICI UTIB## # NA": {
+   "merchant": "Groww",
+   "counterparty_type": "merchant",
+   "category": "investment",
+   "flags": []
+  },
+  "UPI ARJUN NAIR USER@OKICICI ICIC## # FOOD": {
+   "merchant": "Arjun Nair",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI ZERODHA BROKING ZERODHABROKING@HDFCBANK HDFC## # PAY TO MERCHANT": {
+   "merchant": "Zerodha",
+   "counterparty_type": "merchant",
+   "category": "investment",
+   "flags": []
+  },
+  "UPI REFUND AMAZON P AMAZONUPI@APL ICIC## # REFUND": {
+   "merchant": "Amazon",
+   "counterparty_type": "merchant",
+   "category": "shopping",
+   "flags": [
+    "refund"
+   ]
+  },
+  "UPI ZOMATO LTD ZOMATO ORDER@PTYBL UTIB## # PAYMENT": {
+   "merchant": "Zomato",
+   "counterparty_type": "merchant",
+   "category": "food_delivery",
+   "flags": []
+  },
+  "UPI THIRD WAVE USER@YBL SBIN## # NA": {
+   "merchant": "Third Wave",
+   "counterparty_type": "merchant",
+   "category": "other",
+   "flags": []
+  },
+  "UPI TRUFFLES RESTAU PAYTMQR#RTX#@PAYTM KKBK## # PAYMENT FROM PH": {
+   "merchant": "Truffles Restaurant",
+   "counterparty_type": "merchant",
+   "category": "dining",
+   "flags": []
+  },
+  "REV UPI # UBER INDIA SYST UBER.RIDES@HDFCBANK": {
+   "merchant": "Uber",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI MEGHA IYER #@OKHDFCBANK SBIN## # PAYMENT FROM PH": {
+   "merchant": "Mehga Iyer",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI REFUND IRCTC UT IRCTC.UTS@SBI UTIB## # REFUND": {
+   "merchant": "IRCTC",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": [
+    "refund"
+   ]
+  },
+  "UPI INTERGLOBE AVIA INDIGO@ICICI HDFC## # UPI": {
+   "merchant": "Indigo",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI BMRCL BMRCL.QR@KOTAK KKBK## # COLLECT": {
+   "merchant": "Namma Metro",
+   "counterparty_type": "government",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI BMRCL BMRCL.QR@KOTAK HDFC## # PAYMENT": {
+   "merchant": "Namma Metro",
+   "counterparty_type": "government",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI SRI LAKSHMI STORES PAYTMQR#@PAYTM YESB## # PAY TO MERCHANT": {
+   "merchant": "Sri Lakshmi Stores",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "UPI BMRCL BMRCL.QR@KOTAK SBIN## # NA": {
+   "merchant": "Namma Metro",
+   "counterparty_type": "government",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI IRCTC UTS IRCTC.UTS@SBI UTIB## # COLLECT": {
+   "merchant": "IRCTC",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI BESCOM BESCOM@BILLDESK ICIC## # PAY TO MERCHANT": {
+   "merchant": "BESCOM",
+   "counterparty_type": "merchant",
+   "category": "utilities",
+   "flags": []
+  },
+  "UPI IRCTC UTS IRCTC.UTS@SBI YESB## # UPI": {
+   "merchant": "IRCTC",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI MEGHA IYER USER@OKHDFCBANK ICIC## # FOOD": {
+   "merchant": "Mega Iyer",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI VENKATESH RAO #@OKAXIS YESB## # RENT": {
+   "merchant": "Venkatesh Rao",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI NEXTBILLION TEC GROWW.BRK@VALIDICICI UTIB## # SENT USING PAYTM": {
+   "merchant": "Groww",
+   "counterparty_type": "merchant",
+   "category": "investment",
+   "flags": []
+  },
+  "UPI ROPPEN TRANSPORTATION RAPIDO@AXISBANK YESB## # PAYMENT": {
+   "merchant": "Rapido",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI AMAZON PAY INDIA AMAZONUPI@APL KKBK## # PAYMENT": {
+   "merchant": "Amazon",
+   "counterparty_type": "merchant",
+   "category": "shopping",
+   "flags": []
+  },
+  "UPI INNOVATIVE RETA BIGBASKET@ICICI UTIB## # PAYMENT FROM PH": {
+   "merchant": "Bigbasket",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "UPI RAHUL TIWARI USER@OKAXIS SBIN## # NA": {
+   "merchant": "Rahul Tiwari",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI BLINK COMMER BLINKIT.PAYU@HDFCBANK HDFC## # PAYMENT FROM PH": {
+   "merchant": "Blinkit",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "UPI BMRCL BMRCL.QR@KOTAK SBIN## # PAYMENT": {
+   "merchant": "Namma Metro",
+   "counterparty_type": "government",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI SNEHA PATIL USER@AXL UTIB## # TRIP": {
+   "merchant": "Sneha Patil",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI MEGHA IYER USER@OKICICI KKBK## # FOOD": {
+   "merchant": "Mega Food",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "NEFT CR CITI## ACME TECHNOLOGIES PVT LTD ANIK ROY #": {
+   "merchant": "Anik Roy",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI RELIANCE JIO INFOCOMM JIO@SBI YESB## # NA": {
+   "merchant": "Reliance Jio",
+   "counterparty_type": "merchant",
+   "category": "utilities",
+   "flags": []
+  },
+  "UPI ROPPEN TRA RAPIDO@AXISBANK ICIC## # SENT USING PAYTM": {
+   "merchant": "Rapido",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI KIRANAKART TECHNOLOG ZEPTONOW@YBL ICIC## # UPI": {
+   "merchant": "Kiranakart Technologies",
+   "counterparty_type": "merchant",
+   "category": "other",
+   "flags": []
+  },
+  "ACH D BD BSE LIMITED STAR MF #": {
+   "merchant": "BSE Limited",
+   "counterparty_type": "merchant",
+   "category": "investment",
+   "flags": [
+    "recurring",
+    "sip"
+   ]
+  },
+  "REV UPI # INNOVATIVE RETA BIGBASKET@ICICI": {
+   "merchant": "Bigbasket",
+   "counterparty_type": "merchant",
+   "category": "interest_income",
+   "flags": [
+    "interest"
+   ]
+  },
+  "POS # SWIGGY INSTAMART": {
+   "merchant": "Swiggy",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "UPI SNEHA PATI USER@OKAXIS HDFC## # PAYMENT FROM PH": {
+   "merchant": "Sneha Pati",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI ARJUN NAIR #@OKAXIS SBIN## # PAYMENT FROM PH": {
+   "merchant": "Arjun Nair",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI BLINK COMMERCE BLINKIT.PAYU@HDFCBANK KKBK## # PAYMENT": {
+   "merchant": "Blinkit",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "UPI NEXTBILLION TECHNOLOGY GROWW.BRK@VALIDICICI SBIN## # PAY TO MERCHANT": {
+   "merchant": "Groww",
+   "counterparty_type": "merchant",
+   "category": "investment",
+   "flags": []
+  },
+  "UPI RELIANCE JIO INFOCOMM JIO@SBI ICIC## # PAY TO MERCHANT": {
+   "merchant": "Reliance Jio",
+   "counterparty_type": "merchant",
+   "category": "utilities",
+   "flags": []
+  },
+  "UPI ZERODHA BR ZERODHABROKING@HDFCBANK HDFC## # UPI": {
+   "merchant": "Zerodha",
+   "counterparty_type": "merchant",
+   "category": "investment",
+   "flags": []
+  },
+  "UPI ZERODHA BR ZERODHABROKING@HDFCBANK UTIB## # COLLECT": {
+   "merchant": "Zerodha",
+   "counterparty_type": "merchant",
+   "category": "investment",
+   "flags": []
+  },
+  "UPI KUNAL BASU USER@YBL HDFC## # NA": {
+   "merchant": "Kunal Basu",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI KIRANAKART T ZEPTONOW@YBL SBIN## # COLLECT": {
+   "merchant": "Kiranakart",
+   "counterparty_type": "merchant",
+   "category": "other",
+   "flags": []
+  },
+  "UPI RELIANCE JIO INFOCOM JIO@SBI KKBK## # PAYMENT FROM PH": {
+   "merchant": "Reliance Jio",
+   "counterparty_type": "merchant",
+   "category": "utilities",
+   "flags": []
+  },
+  "UPI PRIYA SHARMA USER@OKHDFCBANK ICIC## # CAB SHARE": {
+   "merchant": "Priya Sharma",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI RELIANCE J JIO@SBI UTIB## # SENT USING PAYTM": {
+   "merchant": "Reliance Jio",
+   "counterparty_type": "merchant",
+   "category": "utilities",
+   "flags": []
+  },
+  "UPI REFUND AMA AMAZONUPI@APL KKBK## # REFUND": {
+   "merchant": "Amazon",
+   "counterparty_type": "merchant",
+   "category": "shopping",
+   "flags": [
+    "refund"
+   ]
+  },
+  "UPI NEXTBILLION TECHNOLO GROWW.BRK@VALIDICICI KKBK## # NA": {
+   "merchant": "Groww",
+   "counterparty_type": "merchant",
+   "category": "investment",
+   "flags": []
+  },
+  "UPI VENKATESH RA USER@AXL UTIB## # RENT": {
+   "merchant": "Venkatesh Ra",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI BESCOM BESCOM@BILLDESK YESB## # PAYMENT FROM PH": {
+   "merchant": "BESCOM",
+   "counterparty_type": "merchant",
+   "category": "utilities",
+   "flags": []
+  },
+  "UPI SWIGGY LIMITED SWIGGY.STORES@YE KKBK## # COLLECT": {
+   "merchant": "Swiggy",
+   "counterparty_type": "merchant",
+   "category": "food_delivery",
+   "flags": []
+  },
+  "UPI RELIANCE J JIO@SBI UTIB## # COLLECT": {
+   "merchant": "Reliance Jio",
+   "counterparty_type": "merchant",
+   "category": "utilities",
+   "flags": []
+  },
+  "UPI SWIGGY INS INSTAMART@YE YESB## # PAYMENT": {
+   "merchant": "Swiggy",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "UPI VENKATESH RAO USER@AXL ICIC## # HOUSE RENT OCT": {
+   "merchant": "Venkatesh Rao",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI IRCTC UTS IRCTC.UTS@SBI ICIC## # NA": {
+   "merchant": "IRCTC",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI CRED CLUB CRED.CLUB@AXISB YESB## # SENT USING PAYTM": {
+   "merchant": "Cred Club",
+   "counterparty_type": "merchant",
+   "category": "other",
+   "flags": []
+  },
+  "UPI KIRANAKART T ZEPTONOW@YBL ICIC## # NA": {
+   "merchant": "Kiranakart",
+   "counterparty_type": "merchant",
+   "category": "other",
+   "flags": []
+  },
+  "UPI INTERGLOBE AVIATION INDIGO@ICICI ICIC## # PAYMENT": {
+   "merchant": "Indigo",
+   "counterparty_type": "merchant",
+   "category": "travel",
+   "flags": []
+  },
+  "UPI ARJUN NAIR #@OKSBI YESB## # PAYMENT FROM PH": {
+   "merchant": "Arjun Nair",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "POS # AMAZON PAY INDIA": {
+   "merchant": "Amazon",
+   "counterparty_type": "merchant",
+   "category": "shopping",
+   "flags": []
+  },
+  "UPI MEGHA IYER USER@OKSBI KKBK## # NA": {
+   "merchant": "Mega Iyer",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI RAHUL TIWA USER@IBL SBIN## # FOOD": {
+   "merchant": "Rahul Tiwa",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  },
+  "UPI SRI LAKSHMI STO PAYTMQR#@PAYTM KKBK## # PAYMENT": {
+   "merchant": "Sri Lakshmi Stores",
+   "counterparty_type": "merchant",
+   "category": "groceries",
+   "flags": []
+  },
+  "UPI SWIGGY INSTAMART INSTAMART@YE KKBK## # PAY TO MERCHANT": {
+   "merchant": "Swiggy",
+   "counterparty_type": "merchant",
+   "category": "food_delivery",
+   "flags": []
+  },
+  "UPI PRIYA SHARMA USER@OKAXIS SBIN## # FOOD": {
+   "merchant": "Priya Sharma",
+   "counterparty_type": "person",
+   "category": "p2p_transfer",
+   "flags": []
+  }
+ }
+}

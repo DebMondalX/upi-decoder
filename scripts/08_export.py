@@ -21,6 +21,43 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from upi_decoder.prompts import SHORT_SYSTEM  # noqa: E402
 
 
+def download_adapter(tinker_path: str, out_dir: Path, tar_path: Path, tries: int = 8):
+    """Like tinker_cookbook.weights.download, but resumes a dropped connection
+    (HTTP Range) and retries, keeping the partial archive between attempts."""
+    import time
+    import urllib.request
+
+    import tinker
+    from tinker_cookbook.weights._download import _safe_extract_tar
+
+    rc = tinker.ServiceClient().create_rest_client()
+    for attempt in range(1, tries + 1):
+        try:
+            # signed URLs expire, so fetch a fresh one each attempt
+            url = rc.get_checkpoint_archive_url_from_tinker_path(tinker_path).result().url
+            have = tar_path.stat().st_size if tar_path.exists() else 0
+            req = urllib.request.Request(url, headers={"Range": f"bytes={have}-"} if have else {})
+            with urllib.request.urlopen(req, timeout=120) as r:
+                if have and r.status != 206:  # server ignored Range: start over
+                    have = 0
+                total = have + int(r.headers.get("Content-Length") or 0)
+                with open(tar_path, "ab" if have else "wb") as f:
+                    while chunk := r.read(1 << 20):
+                        f.write(chunk)
+                        have += len(chunk)
+                        print(f"\r  {have / 1e6:,.0f} / {total / 1e6:,.0f} MB", end="", flush=True)
+            print()
+            break
+        except Exception as e:  # noqa: BLE001
+            print(f"\n  attempt {attempt} failed: {e!r}; retrying in {5 * attempt}s")
+            if attempt == tries:
+                raise
+            time.sleep(5 * attempt)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    _safe_extract_tar(tar_path, out_dir)
+    tar_path.unlink()
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", required=True)
@@ -29,7 +66,7 @@ def main():
     ap.add_argument("--skip-merge", action="store_true", help="only download the adapter")
     args = ap.parse_args()
 
-    from tinker_cookbook import weights
+    from tinker_cookbook import weights  # noqa: F401  (build_hf_model below)
 
     run = Path(args.run)
     cfg = json.loads((run / "run_config.json").read_text())
@@ -37,9 +74,16 @@ def main():
     out = Path(args.out) / run.name
     out.mkdir(parents=True, exist_ok=True)
 
-    print(f"downloading {sampler_path}")
-    adapter = weights.download(tinker_path=sampler_path, output_dir=str(out / "adapter"))
-    print(f"adapter -> {adapter}")
+    adapter = str(out / "adapter")
+    if list(Path(adapter).rglob("adapter_config.json")):
+        print(f"adapter already downloaded -> {adapter}")
+    else:
+        print(f"downloading {sampler_path}")
+        download_adapter(sampler_path, Path(adapter), out / "adapter.tar")
+        print(f"adapter -> {adapter}")
+    cfg_files = list(Path(adapter).rglob("adapter_config.json"))
+    if cfg_files:
+        adapter = str(cfg_files[0].parent)
     if args.skip_merge:
         return
 

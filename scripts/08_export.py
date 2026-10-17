@@ -3,8 +3,9 @@
     python scripts/08_export.py --run runs/r1
 
 Steps:
-  1. download the LoRA adapter from Tinker            -> models/<run>/adapter
-  2. merge it into the base model (Hugging Face format) -> models/<run>/hf
+  1. export the final weights on Tinker (save_weights_external) and download
+     each file with resume/retry                         -> models/<run>/export
+  2. if that's a LoRA adapter, merge it into the base model -> models/<run>/hf
   3. print the llama.cpp commands to make a GGUF, and write an Ollama Modelfile
 
 Then:  ollama create upi-decoder -f models/<run>/Modelfile
@@ -21,41 +22,64 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from upi_decoder.prompts import SHORT_SYSTEM  # noqa: E402
 
 
-def download_adapter(tinker_path: str, out_dir: Path, tar_path: Path, tries: int = 8):
-    """Like tinker_cookbook.weights.download, but resumes a dropped connection
-    (HTTP Range) and retries, keeping the partial archive between attempts."""
+def _fetch(url_fn, dest: Path, label: str, tries: int = 8):
+    """Download one file, resuming a dropped connection (HTTP Range) and retrying.
+    url_fn() returns a fresh signed URL (they expire)."""
     import time
     import urllib.request
 
-    import tinker
-    from tinker_cookbook.weights._download import _safe_extract_tar
-
-    rc = tinker.ServiceClient().create_rest_client()
+    part = dest.with_name(dest.name + ".part")
+    dest.parent.mkdir(parents=True, exist_ok=True)
     for attempt in range(1, tries + 1):
         try:
-            # signed URLs expire, so fetch a fresh one each attempt
-            url = rc.get_checkpoint_archive_url_from_tinker_path(tinker_path).result().url
-            have = tar_path.stat().st_size if tar_path.exists() else 0
-            req = urllib.request.Request(url, headers={"Range": f"bytes={have}-"} if have else {})
+            have = part.stat().st_size if part.exists() else 0
+            req = urllib.request.Request(url_fn(), headers={"Range": f"bytes={have}-"} if have else {})
             with urllib.request.urlopen(req, timeout=120) as r:
                 if have and r.status != 206:  # server ignored Range: start over
                     have = 0
                 total = have + int(r.headers.get("Content-Length") or 0)
-                with open(tar_path, "ab" if have else "wb") as f:
+                with open(part, "ab" if have else "wb") as f:
                     while chunk := r.read(1 << 20):
                         f.write(chunk)
                         have += len(chunk)
-                        print(f"\r  {have / 1e6:,.0f} / {total / 1e6:,.0f} MB", end="", flush=True)
+                        print(f"\r  {label}: {have / 1e6:,.0f} / {total / 1e6:,.0f} MB", end="", flush=True)
             print()
-            break
+            part.rename(dest)
+            return
         except Exception as e:  # noqa: BLE001
-            print(f"\n  attempt {attempt} failed: {e!r}; retrying in {5 * attempt}s")
+            print(f"\n  {label}: attempt {attempt} failed: {e!r}; retrying in {5 * attempt}s")
             if attempt == tries:
                 raise
             time.sleep(5 * attempt)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    _safe_extract_tar(tar_path, out_dir)
-    tar_path.unlink()
+
+
+def export_external(run: Path, dest: Path):
+    """Tinker's current export path: load the final training state, save it in
+    Hugging Face format on Tinker's side, then download each file by signed URL."""
+    import tinker
+
+    sc = tinker.ServiceClient()
+    rc = sc.create_rest_client()
+    ext_file = run / "external_weights_path.txt"
+    if ext_file.exists():
+        ext_path = ext_file.read_text().strip()
+        print(f"reusing exported weights {ext_path}")
+    else:
+        ckpts = [json.loads(line) for line in (run / "checkpoints.jsonl").read_text().splitlines() if line.strip()]
+        state = next(c["state_path"] for c in reversed(ckpts) if c.get("state_path"))
+        print(f"loading {state} and exporting it in HF format on Tinker (a few minutes)")
+        tc = sc.create_training_client_from_state(state)
+        ext_path = tc.save_weights_external(f"{run.name}-export").result().path
+        ext_file.write_text(ext_path + "\n")
+        print(f"exported -> {ext_path}")
+    files = sorted(rc.get_external_weights_urls(ext_path).result().urls)
+    print(f"{len(files)} files: {', '.join(files)}")
+    for rel in files:
+        target = dest / rel
+        if target.exists():
+            continue
+        _fetch(lambda rel=rel: rc.get_external_weights_urls(ext_path).result().urls[rel], target, rel)
+    return dest
 
 
 def main():
@@ -63,34 +87,31 @@ def main():
     ap.add_argument("--run", required=True)
     ap.add_argument("--out", default="models")
     ap.add_argument("--quant", default="Q4_K_M", help="llama.cpp quantisation for the GGUF")
-    ap.add_argument("--skip-merge", action="store_true", help="only download the adapter")
+    ap.add_argument("--skip-merge", action="store_true", help="only download")
     args = ap.parse_args()
 
-    from tinker_cookbook import weights  # noqa: F401  (build_hf_model below)
+    from tinker_cookbook import weights
 
     run = Path(args.run)
     cfg = json.loads((run / "run_config.json").read_text())
-    sampler_path = (run / "sampler_path.txt").read_text().strip()
     out = Path(args.out) / run.name
     out.mkdir(parents=True, exist_ok=True)
 
-    adapter = str(out / "adapter")
-    if list(Path(adapter).rglob("adapter_config.json")):
-        print(f"adapter already downloaded -> {adapter}")
-    else:
-        print(f"downloading {sampler_path}")
-        download_adapter(sampler_path, Path(adapter), out / "adapter.tar")
-        print(f"adapter -> {adapter}")
-    cfg_files = list(Path(adapter).rglob("adapter_config.json"))
-    if cfg_files:
-        adapter = str(cfg_files[0].parent)
-    if args.skip_merge:
-        return
-
+    dl = export_external(run, out / "export")
     hf = out / "hf"
-    print(f"merging into {cfg['model']} (downloads the base model the first time)")
-    weights.build_hf_model(base_model=cfg["model"], adapter_path=adapter, output_path=str(hf))
-    print(f"merged HF model -> {hf}")
+    adapters = list(dl.rglob("adapter_config.json"))
+    if adapters:  # a LoRA adapter: merge it into the base model
+        adapter = str(adapters[0].parent)
+        print(f"adapter -> {adapter}")
+        if args.skip_merge:
+            return
+        if not (hf / "config.json").exists():
+            print(f"merging into {cfg['model']} (downloads the base model the first time)")
+            weights.build_hf_model(base_model=cfg["model"], adapter_path=adapter, output_path=str(hf))
+        print(f"merged HF model -> {hf}")
+    else:  # already a full HF model
+        hf = next(dl.rglob("config.json")).parent
+        print(f"full HF model -> {hf}")
 
     gguf = out / f"upi-decoder-{args.quant.lower()}.gguf"
     modelfile = out / "Modelfile"
@@ -101,7 +122,7 @@ def main():
         "PARAMETER num_predict 160\n"
     )
     (out / "Modelfile.safetensors").write_text(
-        f"FROM ./hf\n"
+        f"FROM {hf.resolve()}\n"
         f'SYSTEM """{SHORT_SYSTEM}"""\n'
         "PARAMETER temperature 0\n"
         "PARAMETER num_predict 160\n"

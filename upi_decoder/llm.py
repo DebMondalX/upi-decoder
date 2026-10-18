@@ -36,6 +36,7 @@ class Backend:
     async def generate_many(self, batch: list[list[dict]], progress: bool = True) -> list[GenResult]:
         sem = asyncio.Semaphore(self.concurrency)
         done = 0
+        errors: list[str] = []
 
         async def one(msgs):
             nonlocal done
@@ -44,12 +45,18 @@ class Backend:
                     r = await self.generate(msgs)
                 except Exception as e:  # keep going; failures count as invalid output
                     r = GenResult("", 0.0, error=f"{type(e).__name__}: {e}")
+                    errors.append(r.error)
+                    if len(errors) == 1:
+                        print(f"  [{self.name}] request failed: {r.error}", flush=True)
                 done += 1
                 if progress and (done % 50 == 0 or done == len(batch)):
                     print(f"  [{self.name}] {done}/{len(batch)}", flush=True)
                 return r
 
-        return await asyncio.gather(*(one(m) for m in batch))
+        out = await asyncio.gather(*(one(m) for m in batch))
+        if errors:
+            print(f"  [{self.name}] {len(errors)}/{len(batch)} requests failed (first error above)", flush=True)
+        return out
 
 
 # ---------------------------------------------------------------------------
@@ -152,7 +159,8 @@ class OllamaBackend(Backend):
         t0 = time.perf_counter()
         async with httpx.AsyncClient(timeout=120) as c:
             r = await c.post(f"{self.host}/api/chat", json=body)
-            r.raise_for_status()
+            if r.status_code >= 400:  # Ollama puts the reason in the body
+                raise RuntimeError(f"HTTP {r.status_code}: {r.text[:300]}")
             d = r.json()
         dt = time.perf_counter() - t0
         return GenResult(

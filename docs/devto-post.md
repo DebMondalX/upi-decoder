@@ -48,9 +48,15 @@ The output per line is small and strict:
 
 ## Demo
 
-<!-- TODO: screen recording of the Streamlit app on the synthetic demo statement (no real data). -->
+{% youtube T4COhEbQ5YI %}
 
-The app (`streamlit run app/app.py`) takes CSV, XLS or scanned-PDF exports. It shows a ledger, a monthly spend pivot and an ITR view by financial year. It runs the fine-tuned model locally through Ollama. There's a **synthetic demo statement** button, so you can try it without uploading anything real.
+That's the fine-tuned model running **on my MacBook Air through Ollama, offline**, on a synthetic statement (no real data in the video). The app (`streamlit run app/app.py`) takes CSV, XLS or scanned-PDF exports and shows:
+
+- a **ledger** with merchant, category, counterparty and flags for every line, plus a *"rules say"* column wherever a keyword-rules expense app would have guessed differently
+- a **monthly spend** pivot and chart
+- an **ITR view** by financial year: rent, investments, insurance, interest, salary
+
+There's no hosted version, on purpose. Real bank statements shouldn't be uploaded to anyone's server, including mine.
 
 ## Code
 
@@ -147,7 +153,18 @@ With open weights the expensive part happens **once**, on scrubbed data:
 
 ## My First User
 
-<!-- TODO (Fri/Sat): 2–3 friends run their statements through the app. Who, what broke, what they asked for, would they pay. -->
+I didn't get a real user in time. Nobody sends a friend their bank statement on a weekend deadline, which is fair, and is the product's whole thesis. So I showed it to the two people whose opinion matters most for this idea: an engineer, and a practising **chartered accountant**, the person who'd actually pay for it.
+
+<!-- FILL IN from your two conversations, in your own words. Keep it short and specific; quote them if you can. Delete these comments before publishing. -->
+
+**The engineer** <!-- e.g. a backend dev friend -->:
+<!-- What did they try or look at first? What impressed or confused them? What broke or felt slow? What would they change? -->
+
+**The CA:**
+<!-- Suggested questions: How long does cleaning one client's statement take today? Would they trust a model's categories, and what would make them trust it (confidence scores, a review queue, audit trail)? Does "runs offline on the office laptop" matter to clients? What's missing (GST, Tally export, multiple clients, PDF exports from more banks)? Would they pay, and how much, per client or per season? -->
+
+**What I'm changing because of it:**
+<!-- 1–3 concrete next steps that came out of their feedback. -->
 
 ## Honest notes
 

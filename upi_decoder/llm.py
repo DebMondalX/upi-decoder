@@ -144,6 +144,7 @@ class OllamaBackend(Backend):
         self.host = (host or os.environ.get("OLLAMA_HOST", "http://localhost:11434")).rstrip("/")
         self.concurrency = concurrency  # a laptop serves one request at a time anyway
         self.name = f"local:{model}"
+        self.use_format = True  # newer Ollama engines reject structured output; we drop it then
 
     async def generate(self, messages: list[dict]) -> GenResult:
         import httpx
@@ -153,12 +154,18 @@ class OllamaBackend(Backend):
             "messages": messages,
             "stream": False,
             "think": False,
-            "format": "json",
             "options": {"temperature": 0, "num_predict": 160},
         }
+        if self.use_format:
+            body["format"] = "json"
         t0 = time.perf_counter()
         async with httpx.AsyncClient(timeout=120) as c:
             r = await c.post(f"{self.host}/api/chat", json=body)
+            if r.status_code == 501 and "structured output" in r.text and self.use_format:
+                self.use_format = False  # the model was trained to emit JSON; it doesn't need forcing
+                body.pop("format")
+                t0 = time.perf_counter()
+                r = await c.post(f"{self.host}/api/chat", json=body)
             if r.status_code >= 400:  # Ollama puts the reason in the body
                 raise RuntimeError(f"HTTP {r.status_code}: {r.text[:300]}")
             d = r.json()

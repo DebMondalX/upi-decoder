@@ -106,6 +106,7 @@ Later months (`test_in`, 150 rows):
 | Qwen3.5-4B, few-shot | 78.7% | 0.65 | 71.3% | 74.7% | 1,360 | $0.48 |
 | Qwen3.5-397B, few-shot (teacher) | 86.7% | 0.82 | 78.7% | 81.3% | 1,360 | $2.47 |
 | **Qwen3.5-4B + Tinker LoRA** | **92.7%** | **0.83** | **82.0%** | **95.3%** | **77** | **$0.06** |
+| **same model, 4-bit, on my MacBook Air (Ollama)** | **92.7%** | **0.86** | **82.7%** | **96.0%** | **77** | **$0** |
 
 A bank it never saw (`test_unseen`, HSBC, 57 rows):
 
@@ -115,13 +116,14 @@ A bank it never saw (`test_unseen`, HSBC, 57 rows):
 | Qwen3.5-4B, few-shot | 80.7% | 0.75 | 73.7% |
 | Qwen3.5-397B, few-shot | 87.7% | 0.85 | 77.2% |
 | **Qwen3.5-4B + Tinker LoRA** | **87.7%** | **0.84** | **77.2%** |
+| **same, 4-bit on my laptop** | **86.0%** | **0.82** | **77.2%** |
 
-<!-- TODO: add the "4B fine-tuned, local (Ollama on MacBook Air)" row with laptop latency once exported. -->
+The last row is the one I care about most. I downloaded the LoRA from Tinker, merged it into the base model, compressed it to 4-bit and ran it in Ollama on a MacBook Air: **about 2 seconds per transaction, nothing leaves the laptop, and accuracy didn't drop**. On the unseen bank it lost one row out of 57.
 
 What I take from this:
 - **The 4B student beats the 397B teacher** on later months. It learned *my* conventions; the teacher only has its own guesses. Counterparty accuracy is the starkest gap: 95% vs 81%.
 - **It generalises to a new bank format** as well as the 100x larger model does.
-- **About 44x cheaper per row** than the teacher, and the weights are mine to run offline.
+- **About 44x cheaper per row** than the teacher on Tinker, and **free on my own laptop**, with the same accuracy after 4-bit compression.
 - **Reviewing labels was worth it.** A run on the teacher's raw labels did slightly better on later-months category accuracy (94.0%). But it did much worse on the unseen bank (82.5% vs 87.7%), on self-transfers (F1 0.78 vs 0.93) and on merchant names.
 
 ### Where it still fails
@@ -138,7 +140,7 @@ Because this is **bank data**. Every UPI line carries who you paid, where, how o
 
 With open weights the expensive part happens **once**, on scrubbed data:
 
-1. **Privacy by construction.** The teacher and the trainer only ever saw placeholders and fake names, never real names, numbers or accounts. After training, the weights are mine: `scripts/08_export.py` downloads the LoRA from Tinker, merges it into Qwen3.5-4B and converts it to GGUF, so it runs in **Ollama with no network**. A CA firm can run it on an office laptop and honestly tell clients their statements never left the building.
+1. **Privacy by construction.** The teacher and the trainer only ever saw placeholders and fake names, never real names, numbers or accounts. After training, the weights are mine: `scripts/08_export.py` downloads the LoRA from Tinker, merges it into Qwen3.5-4B, and Ollama compresses it to 4-bit, so it runs **on a laptop with no network**. A CA firm can run it on an office laptop and honestly tell clients their statements never left the building.
 2. **The economics work.** At $0.06 per 1,000 rows on Tinker, and $0 locally, you can charge ₹99 per statement or a few thousand per season to a CA firm and keep nearly all of it. At the teacher's price, or a frontier API's, the margin disappears on the long tail of tiny UPI payments.
 3. **It's *my* model.** Everyone's statement has its own conventions: which account is "mine", what counts as an investment, what a "PG" payment means. Open weights plus a training API meant I could teach those in an evening, then check them on a held-out bank. A closed model would have needed the 1,360-token prompt on every call, and it would still disagree with me.
 4. **No lock-in.** Teacher, student, tokenizer, renderer and export path are all open. If Tinker's prices change, the LoRA is a file I already have.
@@ -151,7 +153,7 @@ With open weights the expensive part happens **once**, on scrubbed data:
 
 - **Test labels:** the 207 test rows were labelled from scratch by Claude, the coding assistant I built this with, independently of the Qwen teacher. I then spot-checked a random 20 and corrected 1, which led to the "investing" convention above. The same written conventions apply to the training labels.
 - **One person's data:** this is three banks, but one person's spending. Expect lower numbers on someone with a very different life; that's what the first-user test is for.
-- **Latency:** the Tinker latencies (2–5 s) are remote API round-trips, not model speed. The laptop number comes from the local Ollama run.
+- **Latency:** the laptop number (~2 s/row, p50) is a MacBook Air running the 4-bit model one row at a time. A statement has a few hundred *distinct* narrations, so a year is a few minutes, once.
 - **Refunds:** none in my test windows, so I can't claim anything about refund detection yet.
 
 ## Prize Categories

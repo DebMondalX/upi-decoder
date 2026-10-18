@@ -1,0 +1,69 @@
+{
+  "test_in": {
+    "local": {
+      "n": 150,
+      "valid_json": 0.9933333333333333,
+      "category_acc": 0.9266666666666666,
+      "category_macro_f1": 0.8624663668058075,
+      "merchant_exact": 0.8266666666666667,
+      "counterparty_acc": 0.96,
+      "self_transfer_f1": 0.9333333333333333,
+      "refund_f1": 0.0,
+      "per_category_f1": {
+        "food_delivery": 1.0,
+        "groceries": 1.0,
+        "dining": 0.9090909090909091,
+        "shopping": 1.0,
+        "travel": 0.8,
+        "fuel": 0.0,
+        "utilities": 0.6666666666666666,
+        "emi_loan": 1.0,
+        "investment": 0.9,
+        "insurance": 1.0,
+        "salary_income": 1.0,
+        "interest_income": 0.9836065573770492,
+        "p2p_transfer": 0.9692307692307692,
+        "self_transfer": 0.9333333333333333,
+        "cash_withdrawal": 1.0,
+        "fees_charges": 1.0,
+        "other": 0.5
+      },
+      "latency_p50_s": 1.9564988749916665,
+      "in_tok": 77,
+      "out_tok": 29.606666666666666,
+      "backend": "local:upi-decoder",
+      "cost_per_1k": null
+    }
+  },
+  "test_unseen": {
+    "local": {
+      "n": 57,
+      "valid_json": 1.0,
+      "category_acc": 0.8596491228070176,
+      "category_macro_f1": 0.8240079365079365,
+      "merchant_exact": 0.7719298245614035,
+      "counterparty_acc": 0.9122807017543859,
+      "self_transfer_f1": 1.0,
+      "refund_f1": 0.0,
+      "per_category_f1": {
+        "food_delivery": 1.0,
+        "groceries": 0.7499999999999999,
+        "dining": 1.0,
+        "shopping": 1.0,
+        "utilities": 0.5714285714285715,
+        "emi_loan": 0.6666666666666666,
+        "salary_income": 1.0,
+        "interest_income": 0.5,
+        "p2p_transfer": 1.0,
+        "self_transfer": 1.0,
+        "cash_withdrawal": 1.0,
+        "other": 0.4
+      },
+      "latency_p50_s": 1.9889680829946883,
+      "in_tok": 74.59649122807018,
+      "out_tok": 29.63157894736842,
+      "backend": "local:upi-decoder",
+      "cost_per_1k": null
+    }
+  }
+}

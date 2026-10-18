@@ -131,7 +131,7 @@ def main():
 Load it into Ollama (the Ollama app must be running). Two ways; try A first.
 
 A) Let Ollama import the merged weights and quantise them itself:
-     cd {out} && ollama create upi-decoder -f Modelfile.safetensors --quantize q4_K_M && cd -
+     cd {out} && ollama create upi-decoder -f Modelfile.safetensors --quantize int4 && cd -   # older Ollama: --quantize q4_K_M
 
 B) If A says the architecture isn't supported, go through llama.cpp's GGUF converter:
      git clone --depth 1 https://github.com/ggml-org/llama.cpp ~/llama.cpp

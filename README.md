@@ -10,7 +10,41 @@ and an ITR view (rent, investments, insurance, interest).
 
 Built for the [DEV Hacktoberfest Open-Source AI Challenge, Week 2: Side Hustle](https://dev.to/challenges/hacktoberfest-week2-2026-10-12).
 
-> Status: work in progress (Oct 2026). Results table lands here once the eval runs on real data.
+**Demo (runs offline on a MacBook Air, synthetic statement):** https://youtu.be/T4COhEbQ5YI
+
+## Results
+
+Trained on ~2,300 of my own transactions from three banks (ICICI, HDFC, HSBC, Dec 2023 – Oct 2026).
+Two held-out test sets, one row per narration pattern:
+
+**`test_in`**: later months than anything in training (150 rows)
+
+| system | category acc | macro-F1 | merchant exact | counterparty acc | input tok/row | $/1k rows |
+|---|---|---|---|---|---|---|
+| keyword rules | 65.3% | 0.37 | 72.0% | 82.0% | – | – |
+| Qwen3.5-4B, few-shot | 78.7% | 0.65 | 71.3% | 74.7% | 1,360 | $0.48 |
+| Qwen3.5-397B, few-shot (the teacher) | 86.7% | 0.82 | 78.7% | 81.3% | 1,360 | $2.47 |
+| **Qwen3.5-4B + Tinker LoRA** | **92.7%** | **0.83** | **82.0%** | **95.3%** | **77** | **$0.06** |
+| **same model, 4-bit, MacBook Air (Ollama)** | **92.7%** | **0.86** | **82.7%** | **96.0%** | **77** | **$0** |
+
+**`test_unseen`**: HSBC, a bank entirely absent from training, OCR'd from scanned PDFs (57 rows)
+
+| system | category acc | macro-F1 | merchant exact |
+|---|---|---|---|
+| keyword rules | 75.4% | 0.68 | 73.7% |
+| Qwen3.5-4B, few-shot | 80.7% | 0.75 | 73.7% |
+| Qwen3.5-397B, few-shot | 87.7% | 0.85 | 77.2% |
+| **Qwen3.5-4B + Tinker LoRA** | **87.7%** | **0.84** | **77.2%** |
+| **same, 4-bit on laptop** | **86.0%** | **0.82** | **77.2%** |
+
+* The fine-tuned 4B **beats its 397B teacher** on later months and matches it on an unseen bank,
+  at ~1/44th the cost per row on Tinker, and for free on a laptop (~2 s/row, p50, no network).
+* 4-bit compression for local use costs essentially nothing (one row on the unseen bank).
+* Full tables, including self-transfer F1 and a run trained on unreviewed teacher labels:
+  [`results/results.md`](results/results.md), [`results/r0/`](results/r0/), [`results/local/`](results/local/).
+  Refund F1 shows 0 because neither test window contains a refund; it isn't measured yet.
+* Test labels were written from scratch by Claude (the coding assistant this was built with),
+  independently of the Qwen teacher, and spot-checked by me (20 random rows, 1 corrected).
 
 ## Why open weights
 
@@ -25,9 +59,9 @@ bill, no data leaving the machine, and you can retrain it for your own bank's qu
 bank exports ──► 01 ingest + scrub PII ──► 02 honest splits ──► 03 teacher labels (Qwen3.5-397B on Tinker)
                     (local only)            train / later-months /     │
                                             unseen-bank                 ▼
-                                                              04 human review (xlsx)
+                                                    03b/03c label conventions + 04 review
                                                                         │
-            08 export → GGUF → Ollama ◄── 06 LoRA fine-tune ◄── 05 SFT data
+         08 export → Ollama (4-bit) ◄── 06 LoRA fine-tune ◄── 05 SFT data
                          │               (Qwen3.5-4B on Tinker)
                          ▼
                  07 eval: rules vs 4B few-shot vs 397B teacher vs fine-tuned vs local
@@ -37,9 +71,9 @@ bank exports ──► 01 ingest + scrub PII ──► 02 honest splits ──�
   replaced *before* anything is sent to Tinker. Merchant names and merchant VPAs are kept: they are
   the signal.
 * **Prompt distillation.** The teacher reads a long prompt with category definitions and rules. The
-  student is trained with a one-line prompt, so it carries the rules in its weights and every call is
-  ~10x fewer input tokens.
-* **Honest eval.** Test sets are hand-labelled from scratch (not teacher-reviewed), de-duplicated
+  student is trained with a one-line prompt, so it carries the rules in its weights: 77 input
+  tokens per call instead of 1,360.
+* **Honest eval.** Test sets are labelled from scratch (not teacher-reviewed), de-duplicated
   (one row per narration pattern), taken from *later months* than training, plus a whole bank the
   model never saw.
 
@@ -95,9 +129,27 @@ for s in train_pool test_in test_unseen; do python scripts/04_review.py import -
 python scripts/05_build_sft.py
 python scripts/06_train.py --name r1
 python scripts/07_eval.py --run runs/r1
-python scripts/08_export.py --run runs/r1          # then follow the printed GGUF/Ollama steps
-streamlit run app/app.py
+python scripts/08_export.py --run runs/r1          # download + merge, then follow the printed Ollama step
+python scripts/07_eval.py --run runs/r1 --local upi-decoder --skip rules student-few teacher-few finetuned --out results/local
+streamlit run app/app.py                           # sidebar: "Local model (Ollama)"
 ```
+
+### Running the model on your laptop
+
+`08_export.py` exports the fine-tuned weights from Tinker (`save_weights_external`, resumable
+per-file download), merges the LoRA into Qwen3.5-4B (~9 GB base download, once) and writes an
+Ollama Modelfile. Then:
+
+```bash
+cd models/r1 && ollama create upi-decoder -f Modelfile.safetensors --quantize int4   # older Ollama: q4_K_M
+ollama run upi-decoder "Narration: UPI/ZOMATO LIM/<ID>.g/UPI/AXIS BANK/<REF12>/<ID>/
+Direction: debit
+Amount: 129.93"
+# {"merchant": "Zomato", "counterparty_type": "merchant", "category": "food_delivery", "flags": []}
+```
+
+The result is ~4.5 GB and needs no network. The app, the eval and `try_model.py` all talk to it
+through Ollama's local API.
 
 ## Label schema
 

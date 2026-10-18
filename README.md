@@ -10,6 +10,7 @@ and an ITR view (rent, investments, insurance, interest).
 
 Built for the [DEV Hacktoberfest Open-Source AI Challenge, Week 2: Side Hustle](https://dev.to/challenges/hacktoberfest-week2-2026-10-12).
 
+**Write-up:** [I fine-tuned a 4B model to read my bank statement, and it beat the 397B model that taught it](https://dev.to/debmondalx/i-fine-tuned-a-4b-model-to-read-my-bank-statement-and-it-beat-the-397b-model-that-taught-it-3hm8)  
 **Demo (runs offline on a MacBook Air, synthetic statement):** https://youtu.be/T4COhEbQ5YI
 
 ## Results
